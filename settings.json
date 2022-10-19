@@ -1,0 +1,24 @@
+{
+	"graphics": {
+		"resolution": [1600, 900],
+		"framerate": 60,
+		"fov": null,
+		"half_fov": null,
+		"num_rays": null,
+		"half_num_rays": null,
+		"delta_angle": null,
+		"max_depth": 20
+	},
+	"player": {
+		"pos": [1.5, 5],
+		"angle": 0,
+		"speed": 0.004,
+		"rotation_speed": 0.002
+	},
+	"controls": {
+		"forward": "z",
+		"left": "q",
+		"backward": "s",
+		"right": "d"
+	}
+}
