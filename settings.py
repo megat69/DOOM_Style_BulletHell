@@ -25,3 +25,7 @@ with open("settings.json", "r", encoding="utf-8") as settings_file:
     SETTINGS.graphics.num_rays = SETTINGS.graphics.resolution[0] // 2
     SETTINGS.graphics.half_num_rays = SETTINGS.graphics.num_rays / 2
     SETTINGS.graphics.delta_angle = SETTINGS.graphics.fov / SETTINGS.graphics.num_rays
+    SETTINGS.graphics.half_width = SETTINGS.graphics.resolution[0] // 2
+    SETTINGS.graphics.half_height = SETTINGS.graphics.resolution[1] // 2
+    SETTINGS.graphics.screen_distance = SETTINGS.graphics.half_width / math.tan(SETTINGS.graphics.half_fov)
+    SETTINGS.graphics.scale = SETTINGS.graphics.resolution[0] // SETTINGS.graphics.num_rays

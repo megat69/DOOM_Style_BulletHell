@@ -84,14 +84,30 @@ class RayCasting:
 			# We keep as final depth the smallest depth between the vertical and horizontal lines
 			depth = min(depth_vertical, depth_horizontal)
 
+			# Projection mapping
+			projection_height = SETTINGS.graphics.screen_distance / (depth + 0.0001)  # Tiny margin not to divide by zero
+
+			# Walls drawing
+			if self.game.is_3D:
+				depth_color = tuple(min(255 / (1 + depth ** 5 * 0.00002), 225) for _ in range(3))
+				pygame.draw.rect(
+					self.game.screen,
+					depth_color,
+					(
+						ray * SETTINGS.graphics.scale, SETTINGS.graphics.half_height - projection_height // 2,
+						SETTINGS.graphics.scale,
+						projection_height
+					)
+				)
+
 			# Draws the raycast for debug purposes
-			pygame.draw.line(
+			"""pygame.draw.line(
 				self.game.screen,
 				'yellow',
 				(100 * original_position_x, 100 * original_position_y),
 				(100 * original_position_x + 100 * depth * cos_a, 100 * original_position_y + 100 * depth * sin_a),
 				2
-			)
+			)"""
 
 			# Calculates the angle of the ray
 			ray_angle += SETTINGS.graphics.delta_angle

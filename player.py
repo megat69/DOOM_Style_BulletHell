@@ -58,11 +58,11 @@ class Player:
 		self.check_wall_collisions(direction)
 
 		# Makes the player rotate
-		if self.game.is_3D is False:
-			if keys[pygame.K_LEFT]:
-				self.angle -= SETTINGS.player.rotation_speed * self.game.delta_time
-			if keys[pygame.K_RIGHT]:
-				self.angle += SETTINGS.player.rotation_speed * self.game.delta_time
+		#if self.game.is_3D is False:
+		if keys[pygame.K_LEFT]:
+			self.angle -= SETTINGS.player.rotation_speed * self.game.delta_time
+		if keys[pygame.K_RIGHT]:
+			self.angle += SETTINGS.player.rotation_speed * self.game.delta_time
 		self.angle %= math.tau
 
 
