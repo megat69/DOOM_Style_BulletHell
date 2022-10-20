@@ -36,16 +36,30 @@ class RayCasting:
 			depth, projection_height, texture, offset = values
 
 			# Gets the correct subportion of the wall to render
-			wall_column = self.wall_textures[texture].subsurface(
-				offset * (SETTINGS.graphics.texture_size - SETTINGS.graphics.scale),
-				0,
-				SETTINGS.graphics.scale,
-				SETTINGS.graphics.texture_size
-			)
+			if projection_height < SETTINGS.graphics.resolution[1]:  # Normal execution if we're not too close to the wall
+				wall_column = self.wall_textures[texture].subsurface(
+					offset * (SETTINGS.graphics.texture_size - SETTINGS.graphics.scale),
+					0,
+					SETTINGS.graphics.scale,
+					SETTINGS.graphics.texture_size
+				)
 
-			# Calculates the correct column of the wall to render at the right size
-			wall_column = pygame.transform.scale(wall_column, (SETTINGS.graphics.scale, projection_height))
-			wall_pos = (ray * SETTINGS.graphics.scale, SETTINGS.graphics.half_height - projection_height // 2)
+				# Calculates the correct column of the wall to render at the right size
+				wall_column = pygame.transform.scale(wall_column, (SETTINGS.graphics.scale, projection_height))
+				wall_pos = (ray * SETTINGS.graphics.scale, SETTINGS.graphics.half_height - projection_height // 2)
+
+			else:  # If the size of the wall exceeds the window's height
+				texture_height = SETTINGS.graphics.texture_size * SETTINGS.graphics.resolution[1] / projection_height
+				wall_column = self.wall_textures[texture].subsurface(
+					offset * (SETTINGS.graphics.texture_size - SETTINGS.graphics.scale),
+					SETTINGS.graphics.half_texture_size - texture_height // 2,
+					SETTINGS.graphics.scale,
+					texture_height
+				)
+
+				# Calculates the correct column of the wall to render at the right size
+				wall_column = pygame.transform.scale(wall_column, (SETTINGS.graphics.scale, SETTINGS.graphics.resolution[1]))
+				wall_pos = (ray * SETTINGS.graphics.scale, 0)
 
 			# Adds the object to the list of objects to render
 			self.objects_to_render.append((depth, wall_column, wall_pos))
