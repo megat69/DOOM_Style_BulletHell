@@ -84,6 +84,9 @@ class RayCasting:
 			# We keep as final depth the smallest depth between the vertical and horizontal lines
 			depth = min(depth_vertical, depth_horizontal)
 
+			# Removing fishbowl effect
+			depth *= math.cos(self.game.player.angle - ray_angle)
+
 			# Projection mapping
 			projection_height = SETTINGS.graphics.screen_distance / (depth + 0.0001)  # Tiny margin not to divide by zero
 
