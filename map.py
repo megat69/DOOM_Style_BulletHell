@@ -2,8 +2,10 @@ import pygame
 
 from settings import SETTINGS
 
-# Creates the map
-map_size = tuple(map(lambda x: x // 100, SETTINGS.graphics.resolution))  # Best if corresponding to the window's aspect ratio
+# -- Creates the map --
+# Generates the map's size based on the resolution, best if corresponding to the window's aspect ratio
+map_size = tuple(map(lambda x: x // 100, SETTINGS.graphics.resolution))
+# Generates the map with its boundaries
 game_map = [
 	[1 if row in (0, map_size[1] - 1) or column in (0, map_size[0] - 1) else False for column in range(map_size[0])] \
 	for row in range(map_size[1])
