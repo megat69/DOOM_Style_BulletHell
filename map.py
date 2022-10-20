@@ -1,8 +1,10 @@
 import pygame
 
+from settings import SETTINGS
+
 # Creates the map
-map_size = (16, 9)  # Best if corresponding to the window's aspect ratio
-map = [
+map_size = tuple(map(lambda x: x // 100, SETTINGS.graphics.resolution))  # Best if corresponding to the window's aspect ratio
+game_map = [
 	[1 if row in (0, map_size[1] - 1) or column in (0, map_size[0] - 1) else False for column in range(map_size[0])] \
 	for row in range(map_size[1])
 ]
@@ -18,7 +20,7 @@ class Map:
 		:param game: The instance of the Game.
 		"""
 		self.game = game
-		self.map = map
+		self.map = game_map
 		self.world_map = {}
 		self.get_map()
 
