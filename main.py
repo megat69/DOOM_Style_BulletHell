@@ -5,6 +5,7 @@ from settings import SETTINGS
 from map import Map
 from player import Player
 from raycasting import RayCasting
+from object_renderer import ObjectRenderer
 
 
 class Game:
@@ -35,6 +36,9 @@ class Game:
 
 		# Loads the player
 		self.player = Player(self)
+
+		# Loads the object renderer
+		self.object_renderer = ObjectRenderer(self)
 
 		# Loads the pseudo3D engine
 		self.raycasting = RayCasting(self)
@@ -70,12 +74,17 @@ class Game:
 		# Fills the screen with black
 		self.screen.fill((0, 0, 0))
 
+		# If we play in 2D, we render the player and the map
 		if self.is_3D is False:
 			# Draws the map
 			self.map.draw()
 
 			# Draws the player
 			self.player.draw()
+
+		# If playing in 3D, we render the project mapping
+		else:
+			self.object_renderer.draw()
 
 
 	def check_events(self):

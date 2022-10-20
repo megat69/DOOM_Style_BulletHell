@@ -29,3 +29,4 @@ with open("settings.json", "r", encoding="utf-8") as settings_file:
     SETTINGS.graphics.half_height = SETTINGS.graphics.resolution[1] // 2
     SETTINGS.graphics.screen_distance = SETTINGS.graphics.half_width / math.tan(SETTINGS.graphics.half_fov)
     SETTINGS.graphics.scale = SETTINGS.graphics.resolution[0] // SETTINGS.graphics.num_rays
+    SETTINGS.graphics.half_texture_size = SETTINGS.graphics.texture_size // 2

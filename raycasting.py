@@ -14,15 +14,57 @@ class RayCasting:
 		"""
 		self.game = game
 
+		# The results of raycasting
+		self.ray_casting_result = []
+
+		# The objects to render
+		self.objects_to_render = []
+
+		# A pointer towards the wall textures
+		self.wall_textures = self.game.object_renderer.wall_textures
+
+
+	def get_objects_to_render(self):
+		"""
+		Gets all objects to render.
+		"""
+		self.objects_to_render.clear()
+
+		# Fetches all raycast results
+		for ray, values in enumerate(self.ray_casting_result):
+			# Unpacks the result
+			depth, projection_height, texture, offset = values
+
+			# Gets the correct subportion of the wall to render
+			wall_column = self.wall_textures[texture].subsurface(
+				offset * (SETTINGS.graphics.texture_size - SETTINGS.graphics.scale),
+				0,
+				SETTINGS.graphics.scale,
+				SETTINGS.graphics.texture_size
+			)
+
+			# Calculates the correct column of the wall to render at the right size
+			wall_column = pygame.transform.scale(wall_column, (SETTINGS.graphics.scale, projection_height))
+			wall_pos = (ray * SETTINGS.graphics.scale, SETTINGS.graphics.half_height - projection_height // 2)
+
+			# Adds the object to the list of objects to render
+			self.objects_to_render.append((depth, wall_column, wall_pos))
+
 
 	def ray_cast(self):
 		"""
 		Casts a ray in every direction from the player's FOV to render the map.
 		"""
+		# Clears the last raycasting result
+		self.ray_casting_result.clear()
+
 		# Original position of the player on the map at the start of the frame
 		original_position_x, original_position_y = self.game.player.pos
 		# Coordinates of the tile the player is on
 		map_position_x, map_position_y = self.game.player.map_pos
+
+		# Texture coordinates
+		texture_vertical, texture_horizontal = 1, 1
 
 		# Calculates the angle of the raycast, based on the player's rotation angle, half FOV, and a small value to
 		# avoid divisions by zero
@@ -50,6 +92,7 @@ class RayCasting:
 
 				# If we found a wall, we stop the cycle
 				if tile_hor in self.game.map.world_map:
+					texture_horizontal = self.game.map.world_map[tile_hor]
 					break
 
 				# Otherwise, we keep going
@@ -74,6 +117,7 @@ class RayCasting:
 
 				# If we found a wall, we stop the cycle
 				if tile_vert in self.game.map.world_map:
+					texture_vertical = self.game.map.world_map[tile_vert]
 					break
 
 				# Otherwise, we keep going
@@ -81,8 +125,16 @@ class RayCasting:
 				vertical_y += direction_y
 				depth_vertical += delta_depth
 
-			# We keep as final depth the smallest depth between the vertical and horizontal lines
-			depth = min(depth_vertical, depth_horizontal)
+			# We keep as final depth the smallest depth between the vertical and horizontal lines, as well as
+			# the texture coordinates
+			if depth_vertical < depth_horizontal:
+				depth, texture = depth_vertical, texture_vertical
+				vertical_y %= 1
+				offset = vertical_y if cos_a > 0 else (1 - vertical_y)
+			else:
+				depth, texture = depth_horizontal, texture_horizontal
+				horizontal_x %= 1
+				offset = (1 - horizontal_x) if sin_a > 0 else horizontal_x
 
 			# Removing fishbowl effect
 			depth *= math.cos(self.game.player.angle - ray_angle)
@@ -92,15 +144,8 @@ class RayCasting:
 
 			# Walls drawing
 			if self.game.is_3D:
-				depth_color = tuple(min(255 / (1 + depth ** 5 * 0.00002), 225) for _ in range(3))
-				pygame.draw.rect(
-					self.game.screen,
-					depth_color,
-					(
-						ray * SETTINGS.graphics.scale, SETTINGS.graphics.half_height - projection_height // 2,
-						SETTINGS.graphics.scale,
-						projection_height
-					)
+				self.ray_casting_result.append(
+					(depth, projection_height, texture, offset)
 				)
 
 			# Draws the raycast for debug purposes
@@ -121,3 +166,4 @@ class RayCasting:
 		Gets called every frame, runs the engine logic.
 		"""
 		self.ray_cast()
+		self.get_objects_to_render()

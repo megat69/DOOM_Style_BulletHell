@@ -7,7 +7,8 @@
 		"num_rays": null,
 		"half_num_rays": null,
 		"delta_angle": null,
-		"max_depth": 20
+		"max_depth": 20,
+		"texture_size": 256
 	},
 	"player": {
 		"pos": [1.5, 5],
