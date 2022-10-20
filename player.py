@@ -21,7 +21,7 @@ class Player:
 		self.angle = SETTINGS.player.angle
 
 
-	def movement(self):
+	def movement_3D(self):
 		"""
 		Makes the player move
 		"""
@@ -64,6 +64,31 @@ class Player:
 		if keys[pygame.K_RIGHT]:
 			self.angle += SETTINGS.player.rotation_speed * self.game.delta_time
 		self.angle %= math.tau
+
+
+	def movement_2D(self):
+		# The player's direction vector
+		direction = Vector2(0)
+
+		# Gets the keys currently pressed
+		keys = pygame.key.get_pressed()
+		if keys[getattr(pygame, f"K_{SETTINGS.controls.forward}")]:
+			direction.y -= 1
+		if keys[getattr(pygame, f"K_{SETTINGS.controls.backward}")]:
+			direction.y += 1
+		if keys[getattr(pygame, f"K_{SETTINGS.controls.left}")]:
+			direction.x -= 1
+		if keys[getattr(pygame, f"K_{SETTINGS.controls.right}")]:
+			direction.x += 1
+
+		# Calculating the player's speed based on its default speed and the delta time
+		speed = SETTINGS.player.speed * self.game.delta_time
+
+		# Multiplies the direction by the delta time
+		direction *= speed
+
+		# Uses the calculated information to make the player move
+		self.check_wall_collisions(direction)
 
 
 	def check_wall(self, x:int, y:int) -> bool:
@@ -111,7 +136,10 @@ class Player:
 		Runs every frame to determine the player's logic.
 		"""
 		# Makes the player move correctly
-		self.movement()
+		if self.game.is_3D:
+			self.movement_3D()
+		else:
+			self.movement_2D()
 
 
 	@property
