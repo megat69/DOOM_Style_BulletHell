@@ -1,7 +1,7 @@
 {
 	"graphics": {
 		"resolution": [1600, 900],
-		"framerate": 60,
+		"framerate": 0,
 		"fov": null,
 		"half_fov": null,
 		"num_rays": null,
