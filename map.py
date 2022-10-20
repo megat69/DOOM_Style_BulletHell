@@ -1,4 +1,5 @@
 import pygame
+from random import randint
 
 from settings import SETTINGS
 
@@ -7,7 +8,7 @@ from settings import SETTINGS
 map_size = tuple(map(lambda x: x // 100, SETTINGS.graphics.resolution))
 # Generates the map with its boundaries
 game_map = [
-	[1 if row in (0, map_size[1] - 1) or column in (0, map_size[0] - 1) else False for column in range(map_size[0])] \
+	[(1 + (1 if randint(0, 5) == 0 or not (row in (0, map_size[1] - 1) or column in (0, map_size[0] - 1)) else 0)) if row in (0, map_size[1] - 1) or column in (0, map_size[0] - 1) or randint(0, 5) == 5 else False for column in range(map_size[0])] \
 	for row in range(map_size[1])
 ]
 
@@ -42,5 +43,8 @@ class Map:
 		Draws the 2D map on the screen.
 		"""
 		if self.game.is_3D is False:
-			[pygame.draw.rect(self.game.screen, 'darkgray', (pos[0] * 100, pos[1] * 100, 100, 100), 2)
-			 for pos in self.world_map]
+			for pos, value in self.world_map.items():
+				self.game.screen.blit(
+					pygame.transform.scale(self.game.object_renderer.wall_textures[value], (100, 100)),
+					(pos[0] * 100, pos[1] * 100)
+				)
