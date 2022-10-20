@@ -70,11 +70,12 @@ class Game:
 		# Fills the screen with black
 		self.screen.fill((0, 0, 0))
 
-		# Draws the map as a test
-		self.map.draw()
+		if self.is_3D is False:
+			# Draws the map
+			self.map.draw()
 
-		# Draws the player as a test
-		self.player.draw()
+			# Draws the player
+			self.player.draw()
 
 
 	def check_events(self):
@@ -85,6 +86,10 @@ class Game:
 			if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
 				pygame.quit()
 				sys.exit(0)
+
+			if event.type == pygame.KEYDOWN:
+				if event.key == pygame.K_SPACE:
+					self.is_3D = not self.is_3D
 
 
 	def run(self):
