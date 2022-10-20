@@ -77,9 +77,10 @@ class Player:
 		"""
 		Checks if the player is intersecting with a wall.
 		"""
-		if self.check_wall(int(self.x + direction.x), int(self.y)):
+		scale = SETTINGS.player.player_size_scale / self.game.delta_time
+		if self.check_wall(int(self.x + direction.x * scale), int(self.y)):
 			self.x += direction.x
-		if self.check_wall(int(self.x), int(self.y + direction.y)):
+		if self.check_wall(int(self.x), int(self.y + direction.y * scale)):
 			self.y += direction.y
 
 
