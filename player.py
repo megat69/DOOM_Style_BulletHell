@@ -90,6 +90,13 @@ class Player:
 		# Uses the calculated information to make the player move
 		self.check_wall_collisions(direction)
 
+		# Head rotation
+		if keys[pygame.K_LEFT]:
+			self.angle -= SETTINGS.player.rotation_speed * self.game.delta_time
+		if keys[pygame.K_RIGHT]:
+			self.angle += SETTINGS.player.rotation_speed * self.game.delta_time
+		self.angle %= math.tau
+
 
 	def check_wall(self, x:int, y:int) -> bool:
 		"""
