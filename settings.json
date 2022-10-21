@@ -21,6 +21,10 @@
 		"forward": "z",
 		"left": "q",
 		"backward": "s",
-		"right": "d"
+		"right": "d",
+		"sensitivity": 0.00015,
+		"mouse_max_rel": 40,
+		"mouse_border_left": 100,
+		"mouse_border_right": null
 	}
 }

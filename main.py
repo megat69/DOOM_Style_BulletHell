@@ -98,7 +98,11 @@ class Game:
 
 			if event.type == pygame.KEYDOWN:
 				if event.key == pygame.K_SPACE:
+					# Toggles 3D mode
 					self.is_3D = not self.is_3D
+
+					# Hides the mouse if in 3D mode
+					pygame.mouse.set_visible(not pygame.mouse.get_visible())
 
 
 	def run(self):

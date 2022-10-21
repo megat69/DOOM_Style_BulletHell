@@ -121,22 +121,35 @@ class Player:
 		Draws the player on the map.
 		"""
 		if self.game.is_3D is False:
-			"""pygame.draw.line(
+			pygame.draw.line(
 				self.game.screen,
 				'yellow',
 				(self.x * 100, self.y * 100),
 				(
-						self.x * 100 + SETTINGS.graphics.resolution[0] * math.cos(self.angle),
-						self.y * 100 + SETTINGS.graphics.resolution[1] * math.sin(self.angle)
+					self.x * 100 + 50 * math.cos(self.angle),
+					self.y * 100 + 50 * math.sin(self.angle)
 				),
 				2
-			)"""
+			)
 			pygame.draw.circle(
 				self.game.screen,
 				'green',
 				(self.x * 100, self.y * 100),
 				15
 			)
+
+
+	def mouse_control(self):
+		"""
+		Controls the player using the mouse in 3D.
+		"""
+		mx, my = pygame.mouse.get_pos()
+		if mx < SETTINGS.controls.mouse_border_left or mx > SETTINGS.controls.mouse_border_right:
+			pygame.mouse.set_pos([SETTINGS.graphics.half_width, SETTINGS.graphics.half_height])
+		self.rel = pygame.mouse.get_rel()[0]
+		self.rel = max(-SETTINGS.controls.mouse_max_rel, min(SETTINGS.controls.mouse_max_rel, self.rel))
+		self.angle += self.rel * SETTINGS.controls.sensitivity * self.game.delta_time
+
 
 	def update(self):
 		"""
@@ -145,6 +158,7 @@ class Player:
 		# Makes the player move correctly
 		if self.game.is_3D:
 			self.movement_3D()
+			self.mouse_control()
 		else:
 			self.movement_2D()
 
