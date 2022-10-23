@@ -167,8 +167,8 @@ class RayCasting:
 				pygame.draw.line(
 					self.game.screen,
 					'yellow',
-					(100 * original_position_x, 100 * original_position_y),
-					(100 * original_position_x + 100 * depth * cos_a, 100 * original_position_y + 100 * depth * sin_a),
+					(SETTINGS.graphics.tile_size * original_position_x, SETTINGS.graphics.tile_size * original_position_y),
+					(SETTINGS.graphics.tile_size * original_position_x + SETTINGS.graphics.tile_size * depth * cos_a, SETTINGS.graphics.tile_size * original_position_y + SETTINGS.graphics.tile_size * depth * sin_a),
 					2
 				)"""
 

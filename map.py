@@ -5,7 +5,7 @@ from settings import SETTINGS
 
 # -- Creates the map --
 # Generates the map's size based on the resolution, best if corresponding to the window's aspect ratio
-map_size = tuple(map(lambda x: x // 100, SETTINGS.graphics.resolution))
+map_size = tuple(map(lambda x: x // SETTINGS.graphics.tile_size, SETTINGS.graphics.resolution))
 # Generates the map with its boundaries
 game_map = [
 	[(1 + (1 if randint(0, 5) == 0 or not (row in (0, map_size[1] - 1) or column in (0, map_size[0] - 1)) else 0)) if row in (0, map_size[1] - 1) or column in (0, map_size[0] - 1) or randint(0, 5) == 5 else False for column in range(map_size[0])] \
@@ -45,6 +45,6 @@ class Map:
 		if self.game.is_3D is False:
 			for pos, value in self.world_map.items():
 				self.game.screen.blit(
-					pygame.transform.scale(self.game.object_renderer.wall_textures[value], (100, 100)),
-					(pos[0] * 100, pos[1] * 100)
+					pygame.transform.scale(self.game.object_renderer.wall_textures[value], (SETTINGS.graphics.tile_size, SETTINGS.graphics.tile_size)),
+					(pos[0] * SETTINGS.graphics.tile_size, pos[1] * SETTINGS.graphics.tile_size)
 				)
