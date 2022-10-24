@@ -44,7 +44,7 @@ class Game:
 		self.raycasting = RayCasting(self)
 
 		# Starts in 2D
-		self.is_3D = False
+		self.is_3D: bool = False
 
 
 	def update(self):

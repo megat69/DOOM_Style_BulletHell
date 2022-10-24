@@ -52,9 +52,6 @@ class ObjectRenderer:
 		Loads all the wall textures.
 		"""
 		return {
-			i: self.get_texture(f"assets/textures/{i}.png")\
+			i: self.get_texture(f"assets/textures/{i}.png")
 			for i in range(1, len(os.listdir(os.path.join(os.path.dirname(__file__), "assets/textures/"))) + 1)
 		}
-
-
-
