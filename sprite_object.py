@@ -103,7 +103,7 @@ class AnimatedSprite(SpriteObject):
 		path:str='assets/animated_sprites/green_flame/0.png',
 		pos:tuple=(11.5, 3.5),
 		scale:float=0.8,
-		shift:int=0.15,
+		shift:int=0.27,
 		animation_time:int=120
 	):
 		# Calls the superclass
@@ -150,7 +150,7 @@ class AnimatedSprite(SpriteObject):
 		"""
 		Animates to next frame if the given time has elapsed.
 		"""
-		self.animation_trigger = False
+		self.play_animation = False
 
 		# Gets the current time
 		time_now = pygame.time.get_ticks()
