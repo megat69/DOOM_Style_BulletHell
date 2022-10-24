@@ -15,13 +15,43 @@ class ObjectRenderer:
 		self.game = game
 		self.screen = self.game.screen
 		self.wall_textures = self.load_wall_textures()
+		IMAGE_RESOLUTION = (SETTINGS.graphics.resolution[0], SETTINGS.graphics.resolution [1] // 2)
+		self.sky_texture = self.get_texture('assets/textures/sky.png', IMAGE_RESOLUTION)
+		self.sky_offset = 0
 
 
 	def draw(self):
 		"""
 		Draws the game objects' render.
 		"""
+		# Renders the sky
+		self.draw_background()
+
+		# Renders all the game objects
 		self.render_game_objects()
+
+
+	def draw_background(self):
+		"""
+		Draws the sky texture if in 3D.
+		"""
+		if self.game.is_3D:
+			# Gets the offset of the sky texture
+			self.sky_offset = (self.sky_offset + 2.0 * self.game.player.rel) % SETTINGS.graphics.resolution[0]
+
+			# Draws two sky textures, each being slightly offset so it matches the perspective
+			self.screen.blit(self.sky_texture, (-self.sky_offset, 0))
+			self.screen.blit(self.sky_texture, (-self.sky_offset + SETTINGS.graphics.resolution[0], 0))
+
+			# Draws the floor color
+			pygame.draw.rect(
+				self.screen,
+				SETTINGS.graphics.floor_color,
+				(
+					0, SETTINGS.graphics.resolution[1] // 2,
+					SETTINGS.graphics.resolution[0], SETTINGS.graphics.resolution[1],
+				)
+			)
 
 
 	def render_game_objects(self):
@@ -53,5 +83,5 @@ class ObjectRenderer:
 		"""
 		return {
 			i: self.get_texture(f"assets/textures/walls/{i}.png")
-			for i in range(1, len(os.listdir(os.path.join(os.path.dirname(__file__), "assets/textures/"))) + 1)
+			for i in range(1, len(os.listdir(os.path.join(os.path.dirname(__file__), "assets/textures/walls/"))) + 1)
 		}

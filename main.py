@@ -71,20 +71,9 @@ class Game:
 		"""
 		Gets called every frame to draw the main sprites to the screen.
 		"""
-		FLOOR_COLOR = (120, 20, 0)
-
-		# Fills the screen with black
-		self.screen.fill((0, 0, 0) if self.is_3D else FLOOR_COLOR)
-
-		# Fills the bottom of the screen with a red-ish color
-		pygame.draw.rect(
-			self.screen,
-			FLOOR_COLOR,
-			(
-				0, SETTINGS.graphics.resolution[1] // 2,
-				SETTINGS.graphics.resolution[0], SETTINGS.graphics.resolution[1],
-			)
-		)
+		# Fills the screen with the floor color if in 2D
+		if self.is_3D is False:
+			self.screen.fill(SETTINGS.graphics.floor_color)
 
 		# If we play in 2D, we render the player and the map
 		if self.is_3D is False:

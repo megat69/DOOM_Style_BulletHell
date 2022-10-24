@@ -9,7 +9,8 @@
 		"delta_angle": null,
 		"max_depth": 20,
 		"texture_size": 256,
-		"tile_size": 100
+		"tile_size": 100,
+		"floor_color": [40, 20, 0]
 	},
 	"player": {
 		"pos": [1.5, 5],
