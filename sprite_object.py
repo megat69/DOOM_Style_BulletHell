@@ -6,7 +6,14 @@ from settings import SETTINGS
 
 
 class SpriteObject:
-	def __init__(self, game, path='assets/sprites/candlebra.png', pos=(10.5, 3.5)):
+	def __init__(
+		self,
+		game,
+		path:str='assets/sprites/candlebra.png',
+		pos:tuple=(10.5, 3.5),
+		scale:float=1.0,
+		shift:int=0.27
+	):
 		"""
 		Creates a new sprite instance.
 		:param game: The Game instance.
@@ -20,6 +27,8 @@ class SpriteObject:
 		self.IMAGE_WIDTH = self.image.get_width()
 		self.IMAGE_HALF_WIDTH = self.image.get_width() // 2
 		self.IMAGE_RATIO = self.IMAGE_WIDTH / self.image.get_height()
+		self.SPRITE_SCALE = scale
+		self.SPRITE_HEIGHT_SHIFT = shift
 		# Initialization of later attributes
 		self.theta, self.screen_x, self.dist, self.norm_dist = 0, 0, 1, 1
 		self.sprite_half_width = 0
@@ -59,7 +68,7 @@ class SpriteObject:
 		"""
 		Gets the projected image of the sprite.
 		"""
-		proj = SETTINGS.graphics.screen_distance / self.norm_dist
+		proj = SETTINGS.graphics.screen_distance / self.norm_dist * self.SPRITE_SCALE
 		# Takes into account different image ratios
 		proj_width, proj_height = proj * self.IMAGE_RATIO, proj
 
@@ -68,7 +77,8 @@ class SpriteObject:
 
 		# Finds the sprite's position on the screen
 		self.sprite_half_width = proj_width // 2
-		pos = self.screen_x - self.sprite_half_width, SETTINGS.graphics.resolution[1] // 2 - proj_height // 2
+		height_shift = proj_height * self.SPRITE_HEIGHT_SHIFT
+		pos = self.screen_x - self.sprite_half_width, SETTINGS.graphics.resolution[1] // 2 - proj_height // 2 + height_shift
 
 		# Adds the sprite to the array of objects to render during raycasting
 		self.game.raycasting.objects_to_render.append((self.norm_dist, image, pos))
