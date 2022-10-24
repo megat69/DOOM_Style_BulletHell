@@ -78,12 +78,11 @@ class Game:
 		"""
 		Gets called every frame to draw the main sprites to the screen.
 		"""
-		# Fills the screen with the floor color if in 2D
-		if self.is_3D is False:
-			self.screen.fill(SETTINGS.graphics.floor_color)
-
 		# If we play in 2D, we render the player and the map
 		if self.is_3D is False:
+			# Fills the screen with the floor color if in 2D
+			self.screen.fill(SETTINGS.graphics.floor_color)
+
 			# Draws the map
 			self.map.draw()
 

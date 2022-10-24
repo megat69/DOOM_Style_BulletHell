@@ -86,11 +86,29 @@ class SpriteObject:
 		self.game.raycasting.objects_to_render.append((self.norm_dist, image, pos))
 
 
+	def render_2D_sprite(self):
+		"""
+		Renders a sprite in 2D mode.
+		"""
+		self.game.screen.blit(
+			pygame.transform.scale(self.image, (
+				SETTINGS.graphics.sprite_size_2D * self.IMAGE_RATIO,
+				SETTINGS.graphics.sprite_size_2D
+			)),
+			(
+				int(self.x * SETTINGS.graphics.tile_size) - SETTINGS.graphics.sprite_size_2D // 2,
+				int(self.y * SETTINGS.graphics.tile_size) - SETTINGS.graphics.sprite_size_2D // 2
+			)
+		)
+
 	def update(self):
 		"""
 		Updates the sprite every frame.
 		"""
-		self.get_sprite()
+		if self.game.is_3D:
+			self.get_sprite()
+		else:
+			self.render_2D_sprite()
 
 
 class AnimatedSprite(SpriteObject):
