@@ -6,7 +6,7 @@ from map import Map
 from player import Player
 from raycasting import RayCasting
 from object_renderer import ObjectRenderer
-from sprite_object import SpriteObject
+from sprite_object import SpriteObject, AnimatedSprite
 
 
 class Game:
@@ -46,6 +46,7 @@ class Game:
 
 		# Loads the sprites
 		self.static_sprite = SpriteObject(self)
+		self.animated_sprite = AnimatedSprite(self)
 
 		# Starts in 2D
 		self.is_3D: bool = False
@@ -62,6 +63,7 @@ class Game:
 		self.raycasting.update()
 
 		self.static_sprite.update()
+		self.animated_sprite.update()
 
 		# Erases the pygame display
 		pygame.display.flip()
