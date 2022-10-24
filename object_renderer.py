@@ -58,7 +58,8 @@ class ObjectRenderer:
 		"""
 		Renders all objects in the game.
 		"""
-		objects_list = self.game.raycasting.objects_to_render
+		# Gets the list of objects to render, and sorts them by the first away to the closest
+		objects_list = sorted(self.game.raycasting.objects_to_render, key=lambda t: t[0], reverse=True)
 
 		# Fetches all objects in the raycast results and renders them
 		for depth, image, pos in objects_list:
