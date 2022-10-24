@@ -6,6 +6,7 @@ from map import Map
 from player import Player
 from raycasting import RayCasting
 from object_renderer import ObjectRenderer
+from sprite_object import SpriteObject
 
 
 class Game:
@@ -43,6 +44,9 @@ class Game:
 		# Loads the pseudo3D engine
 		self.raycasting = RayCasting(self)
 
+		# Loads the sprites
+		self.static_sprite = SpriteObject(self)
+
 		# Starts in 2D
 		self.is_3D: bool = False
 
@@ -56,6 +60,8 @@ class Game:
 
 		# Updates the engine
 		self.raycasting.update()
+
+		self.static_sprite.update()
 
 		# Erases the pygame display
 		pygame.display.flip()
