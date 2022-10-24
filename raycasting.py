@@ -163,14 +163,14 @@ class RayCasting:
 				)
 
 			# Draws the raycast for debug purposes
-			"""if self.game.is_3D is False:
-				pygame.draw.line(
-					self.game.screen,
-					'yellow',
-					(SETTINGS.graphics.tile_size * original_position_x, SETTINGS.graphics.tile_size * original_position_y),
-					(SETTINGS.graphics.tile_size * original_position_x + SETTINGS.graphics.tile_size * depth * cos_a, SETTINGS.graphics.tile_size * original_position_y + SETTINGS.graphics.tile_size * depth * sin_a),
-					2
-				)"""
+			# if self.game.is_3D is False:
+			# 	pygame.draw.line(
+			# 		self.game.screen,
+			# 		'yellow',
+			# 		(SETTINGS.graphics.tile_size * original_position_x, SETTINGS.graphics.tile_size * original_position_y),
+			# 		(SETTINGS.graphics.tile_size * original_position_x + SETTINGS.graphics.tile_size * depth * cos_a, SETTINGS.graphics.tile_size * original_position_y + SETTINGS.graphics.tile_size * depth * sin_a),
+			# 		2
+			# 	)
 
 			# Calculates the angle of the ray
 			ray_angle += SETTINGS.graphics.delta_angle

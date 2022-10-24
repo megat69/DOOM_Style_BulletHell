@@ -20,7 +20,7 @@ with open("settings.json", "r", encoding="utf-8") as settings_file:
     del add_attrs_to_settings
 
     # Dynamic settings
-    SETTINGS.graphics.fov = math.pi / 3
+    SETTINGS.graphics.fov = math.pi / 2.5
     SETTINGS.graphics.half_fov = SETTINGS.graphics.fov / 2
     SETTINGS.graphics.num_rays = SETTINGS.graphics.resolution[0] // 2
     SETTINGS.graphics.half_num_rays = SETTINGS.graphics.num_rays / 2

@@ -109,7 +109,7 @@ class Game:
 				sys.exit(0)
 
 			if event.type == pygame.KEYDOWN:
-				if event.key == pygame.K_SPACE:
+				if event.key == getattr(pygame, f"K_{SETTINGS.controls.perspective_change.upper()}"):
 					# Toggles 3D mode
 					self.is_3D = not self.is_3D
 
