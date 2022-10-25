@@ -20,6 +20,9 @@ class Player:
 		self.x, self.y = SETTINGS.player.pos
 		self.angle = SETTINGS.player.angle
 
+		# Keeping in mind whether the player has shot
+		self.shot = False
+
 
 	def movement_3D(self):
 		"""
@@ -149,6 +152,17 @@ class Player:
 		self.angle += self.rel * SETTINGS.controls.sensitivity * self.game.delta_time
 
 
+	def single_fire_event(self, event):
+		"""
+		Fires if the player presses the left mouse button or the fire key, and can shoot.
+		"""
+		if ((event.type == pygame.MOUSEBUTTONDOWN and event.button == 1) or
+				(event.type == pygame.KEYDOWN and event.key == getattr(pygame, f"K_{SETTINGS.controls.fire}"))) \
+				and (self.shot or self.game.weapon.reloading) is False:
+			self.shot = True
+			self.game.weapon.reloading = True
+
+
 	def update(self):
 		"""
 		Runs every frame to determine the player's logic.
@@ -165,7 +179,6 @@ class Player:
 	def pos(self):
 		""" Returns the player's position """
 		return self.x, self.y
-
 
 	@property
 	def map_pos(self):

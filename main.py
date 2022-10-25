@@ -7,6 +7,7 @@ from player import Player
 from raycasting import RayCasting
 from object_renderer import ObjectRenderer
 from object_handler import ObjectHandler
+from weapon import Weapon
 
 
 class Game:
@@ -47,6 +48,9 @@ class Game:
 		# Loads the objects handler
 		self.objects_handler = ObjectHandler(self)
 
+		# Loads the weapon
+		self.weapon = Weapon(self)
+
 		# Starts in 2D
 		self.is_3D: bool = False
 
@@ -63,6 +67,9 @@ class Game:
 
 		# Updates the objects in the game
 		self.objects_handler.update()
+
+		# Updates the weapon
+		self.weapon.update()
 
 		# Erases the pygame display
 		pygame.display.flip()
@@ -93,23 +100,32 @@ class Game:
 		else:
 			self.object_renderer.draw()
 
+			# Draws the weapon
+			self.weapon.draw()
+
 
 	def check_events(self):
 		"""
 		Checks for events having occurred during the frame.
 		"""
 		for event in pygame.event.get():
+			# Monitors the leave event (press of escape key or window closing)
 			if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
 				pygame.quit()
 				sys.exit(0)
 
 			if event.type == pygame.KEYDOWN:
+				# Monitors the perspective change
 				if event.key == getattr(pygame, f"K_{SETTINGS.controls.perspective_change.upper()}"):
 					# Toggles 3D mode
 					self.is_3D = not self.is_3D
 
 					# Hides the mouse if in 3D mode
 					pygame.mouse.set_visible(not pygame.mouse.get_visible())
+
+			# Allows the player to take a shot
+			if self.is_3D:
+				self.player.single_fire_event(event)
 
 
 	def run(self):

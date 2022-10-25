@@ -26,6 +26,7 @@
 		"backward": "s",
 		"right": "d",
 		"perspective_change": "space",
+		"fire": "e",
 		"sensitivity": 0.00015,
 		"mouse_max_rel": 40,
 		"mouse_border_left": 100,
