@@ -4,7 +4,7 @@ import os
 from settings import SETTINGS
 
 
-class Sound:
+class SoundHandler:
 	"""
 	Handles all audio in the game.
 	"""
