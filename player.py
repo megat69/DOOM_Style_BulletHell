@@ -161,6 +161,8 @@ class Player:
 				and (self.shot or self.game.weapon.reloading) is False:
 			self.shot = True
 			self.game.weapon.reloading = True
+			# Plays the firing sound
+			self.game.sound.loaded_sounds['shotgun'].play()
 
 
 	def update(self):

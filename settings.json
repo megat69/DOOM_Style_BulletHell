@@ -31,5 +31,11 @@
 		"mouse_max_rel": 40,
 		"mouse_border_left": 100,
 		"mouse_border_right": null
+	},
+	"sound": {
+		"master": 1.0,
+		"weapon": 1.0,
+		"entity": 1.0,
+		"sfx": 1.0
 	}
 }

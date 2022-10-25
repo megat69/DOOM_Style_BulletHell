@@ -8,6 +8,7 @@ from raycasting import RayCasting
 from object_renderer import ObjectRenderer
 from object_handler import ObjectHandler
 from weapon import Weapon
+from sounds import Sound
 
 
 class Game:
@@ -33,6 +34,9 @@ class Game:
 		"""
 		Creates a new game.
 		"""
+		# Loads all the sounds
+		self.sound = Sound(self)
+
 		# Loads the game's map
 		self.map = Map(self)
 

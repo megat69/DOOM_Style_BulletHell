@@ -1,3 +1,4 @@
+import os
 import pygame
 from collections import deque
 
@@ -41,6 +42,8 @@ class Weapon(AnimatedSprite):
 		self.frame_counter = 0
 		# We keep in mind the weapon's damage
 		self.damage = 50
+		# Loads the shotgun sound
+		self.game.sound.load_sound("shotgun", os.path.join(self.game.sound.sounds_path, "shotgun.wav"), "weapon")
 
 
 	def animate_shot(self):
