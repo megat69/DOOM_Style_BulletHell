@@ -1,4 +1,5 @@
 from sprite_object import SpriteObject, AnimatedSprite, Fireball
+from entity import Entity
 
 
 class ObjectHandler:
@@ -8,6 +9,8 @@ class ObjectHandler:
 	def __init__(self, game):
 		self.game = game
 		self.sprites_list = []
+		self.entities = []
+		self.entity_sprite_path = 'assets/entities/'
 		self.static_sprites_path = 'assets/sprites/'
 		self.animated_sprites_path = "assets/animated_sprites/"
 
@@ -15,13 +18,15 @@ class ObjectHandler:
 		self.add_sprite(SpriteObject(game))
 		self.add_sprite(AnimatedSprite(game))
 		self.add_sprite(Fireball(game))
+		self.add_sprite(Entity(game))
 
 
 	def update(self):
 		"""
-		Updates all sprites in the game.
+		Updates all sprites and entities in the game.
 		"""
 		[sprite.update() for sprite in self.sprites_list]
+		[entity.update() for entity in self.entities]
 
 
 	def add_sprite(self, sprite):
@@ -30,3 +35,11 @@ class ObjectHandler:
 		:param sprite: The sprite to add.
 		"""
 		self.sprites_list.append(sprite)
+
+
+	def add_entity(self, entity):
+		"""
+		Adds an entity to the handler.
+		:param entity: The entity to add.
+		"""
+		self.entities.append(entity)

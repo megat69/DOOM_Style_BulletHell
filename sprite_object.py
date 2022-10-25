@@ -204,4 +204,5 @@ class Fireball(SpriteObject):
 			shift: int = 0.5
 	):
 		super().__init__(game, path, pos, scale, shift)
+		# Lowers the culling distance a ton so the player can still see the fireball even if really close by
 		self.culling_distance = 0.1
