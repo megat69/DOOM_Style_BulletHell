@@ -31,6 +31,7 @@ class SpriteObject:
 		self.IMAGE_RATIO = self.IMAGE_WIDTH / self.image.get_height()
 		self.SPRITE_SCALE = scale
 		self.SPRITE_HEIGHT_SHIFT = shift
+		self.culling_distance = 0.35  # How far away from the camera to cull the sprite
 		# Initialization of later attributes
 		self.theta, self.screen_x, self.dist, self.norm_dist = 0, 0, 1, 1
 		self.sprite_half_width = 0
@@ -62,7 +63,7 @@ class SpriteObject:
 
 		# Only makes further calculations if the sprite is in the visible spectrum
 		if -self.IMAGE_HALF_WIDTH < self.screen_x < (SETTINGS.graphics.resolution[0] + self.IMAGE_HALF_WIDTH) and\
-				self.norm_dist > 0.5:
+				self.norm_dist > self.culling_distance:
 			self.get_sprite_projection()
 
 
@@ -92,12 +93,12 @@ class SpriteObject:
 		"""
 		self.game.screen.blit(
 			pygame.transform.scale(self.image, (
-				SETTINGS.graphics.sprite_size_2D * self.IMAGE_RATIO,
-				SETTINGS.graphics.sprite_size_2D
+				SETTINGS.graphics.sprite_size_2D * self.IMAGE_RATIO * self.SPRITE_SCALE,
+				SETTINGS.graphics.sprite_size_2D * self.SPRITE_SCALE
 			)),
 			(
-				int(self.x * SETTINGS.graphics.tile_size) - SETTINGS.graphics.sprite_size_2D // 2,
-				int(self.y * SETTINGS.graphics.tile_size) - SETTINGS.graphics.sprite_size_2D // 2
+				int(self.x * SETTINGS.graphics.tile_size) - SETTINGS.graphics.sprite_size_2D * self.SPRITE_SCALE // 2,
+				int(self.y * SETTINGS.graphics.tile_size) - SETTINGS.graphics.sprite_size_2D * self.SPRITE_SCALE // 2
 			)
 		)
 
@@ -190,3 +191,17 @@ class AnimatedSprite(SpriteObject):
 			# We rotate the queue and select the next frame as the current frame
 			images.rotate(-1)
 			self.image = images[0]
+
+
+
+class Fireball(SpriteObject):
+	def __init__(
+			self,
+			game,
+			path: str = 'assets/sprites/fireball.png',
+			pos: tuple = (10.5, 4.5),
+			scale: float = 0.25,
+			shift: int = 0.5
+	):
+		super().__init__(game, path, pos, scale, shift)
+		self.culling_distance = 0.1

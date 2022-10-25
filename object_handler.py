@@ -1,4 +1,4 @@
-from sprite_object import SpriteObject, AnimatedSprite
+from sprite_object import SpriteObject, AnimatedSprite, Fireball
 
 
 class ObjectHandler:
@@ -14,6 +14,7 @@ class ObjectHandler:
 		# Sprite creation
 		self.add_sprite(SpriteObject(game))
 		self.add_sprite(AnimatedSprite(game))
+		self.add_sprite(Fireball(game))
 
 
 	def update(self):
