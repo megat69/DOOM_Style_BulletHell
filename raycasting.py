@@ -1,5 +1,6 @@
 import pygame
 import math
+from numba import jit
 
 from settings import SETTINGS
 
@@ -61,8 +62,37 @@ class RayCasting:
 				wall_column = pygame.transform.scale(wall_column, (SETTINGS.graphics.scale, SETTINGS.graphics.resolution[1]))
 				wall_pos = (ray * SETTINGS.graphics.scale, 0)
 
+			# Darkens the wall column based on its distance with the camera
+			wall_column = self.darken(wall_column, depth)
+
 			# Adds the object to the list of objects to render
 			self.objects_to_render.append((depth, wall_column, wall_pos))
+
+
+	def darken(self, surf: pygame.Surface, depth: float, multiplier: float = 2) -> pygame.Surface:
+		"""
+		Returns a darkened version of the given surface based on the depth.
+		:param surf: The surface to darken.
+		:param depth: The depth at which the surface will be placed in 3D space.
+		:param multiplier: The darkening multiplier, default is 2.
+		:return: The darkened surface.
+		"""
+		# Uses a darkening method, heavy on the CPU
+		if SETTINGS.graphics.advanced_depth_darkening:
+			# Creates a surface with a special tag with the size of the given surface
+			darkener = pygame.Surface(surf.get_size(), flags=pygame.SRCALPHA)
+
+			# Remembers how much this is to darken
+			darkening_depth = depth * multiplier  # Adjust based on liking, found 2 to be subtle but effective
+
+			# Darkens the darkening surface
+			darkener.fill((darkening_depth, darkening_depth, darkening_depth, 0))
+
+			# Blits the darkener on top of the base surface, essentially making it darker
+			surf.blit(darkener, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
+
+		# Returns the surface
+		return surf
 
 
 	def ray_cast(self):
