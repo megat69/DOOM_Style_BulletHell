@@ -20,6 +20,9 @@ class Player:
 		self.x, self.y = SETTINGS.player.pos
 		self.angle = SETTINGS.player.angle
 
+		# Keeping in mind if the player is moving
+		self.is_moving = False
+
 		# Keeping in mind whether the player has shot
 		self.shot = False
 
@@ -56,6 +59,9 @@ class Player:
 		if keys[getattr(pygame, f"K_{SETTINGS.controls.right}")]:
 			direction.x -= speed_sin
 			direction.y += speed_cos
+
+		# Keeps in mind whether the player is moving
+		self.is_moving = direction != Vector2(0)
 
 		# Uses the calculated information to make the player move
 		self.check_wall_collisions(direction)

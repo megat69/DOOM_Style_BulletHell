@@ -1,5 +1,6 @@
 import pygame
 import sys
+import math
 
 from settings import SETTINGS
 from map import Map
@@ -10,7 +11,12 @@ from object_handler import ObjectHandler
 from weapon import Weapon
 from sounds import SoundHandler
 
-
+# TODO : Head bobbing
+# TODO : Normalize player movement direction
+# TODO : Multiple weapons
+# TODO : Enemies
+# TODO : Fireballs
+# TODO : First map
 class Game:
 	"""
 	The main game instance.
@@ -21,6 +27,7 @@ class Game:
 
 		# Creates the main application's window
 		self.screen = pygame.display.set_mode(SETTINGS.graphics.resolution)
+		self.rendering_surface = pygame.Surface(SETTINGS.graphics.resolution)
 
 		# The game's clock system (keeps a constant framerate and delta time)
 		self.delta_time = 1
@@ -102,7 +109,16 @@ class Game:
 
 		# If playing in 3D, we render the project mapping
 		else:
+			# Renders all the objects on the rendering surface
 			self.object_renderer.draw()
+
+			# We calculate the view bobbing based on the elapsed time, the strength, and whether the player is moving
+			view_bobbing = math.sin(pygame.time.get_ticks() / 300) * 5 * SETTINGS.graphics.view_bobbing_strength * (
+					1 + self.player.is_moving
+			)
+
+			# We blit the rendering surface onto the screen
+			self.screen.blit(self.rendering_surface, (0, view_bobbing * SETTINGS.graphics.view_bobbing))
 
 			# Draws the weapon
 			self.weapon.draw()

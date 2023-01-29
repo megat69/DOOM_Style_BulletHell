@@ -13,7 +13,7 @@ class ObjectRenderer:
 		:param game: The instance of the Game.
 		"""
 		self.game = game
-		self.screen = self.game.screen
+		self.screen = self.game.rendering_surface
 		self.wall_textures = self.load_wall_textures()
 		IMAGE_RESOLUTION = (SETTINGS.graphics.resolution[0], SETTINGS.graphics.resolution [1] // 2)
 		self.sky_texture = self.get_texture('assets/textures/sky.png', IMAGE_RESOLUTION)

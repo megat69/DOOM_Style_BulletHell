@@ -12,7 +12,9 @@
 		"tile_size": 100,
 		"floor_color": [40, 20, 0],
 		"sprite_size_2D": 64,
-		"advanced_depth_darkening": false
+		"advanced_depth_darkening": true,
+		"view_bobbing": true,
+		"view_bobbing_strength": 1.0
 	},
 	"player": {
 		"pos": [1.5, 5],
