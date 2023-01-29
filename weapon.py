@@ -102,7 +102,7 @@ class Pistol(Weapon):
 	A pistol.
 	"""
 	def __init__(self, game):
-		super().__init__(game, 'assets/animated_sprites/pistol/0.png', 5, name="pistol")
+		super().__init__(game, 'assets/animated_sprites/pistol/0.png', 3, name="pistol")
 
 	def get_damage(self, distance: float):
 		"""
