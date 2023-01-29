@@ -27,7 +27,7 @@ class Entity(AnimatedSprite):
 
 		# Entity parameters
 		self.attack_distance = 20
-		self.speed = 0.035
+		self.speed = 0.025
 		self.size = 10
 		self.health = 100
 		self.alive = True
