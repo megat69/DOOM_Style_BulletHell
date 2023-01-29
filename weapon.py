@@ -40,10 +40,15 @@ class Weapon(AnimatedSprite):
 		# Remembers the amount of animation frames we have and which we are on
 		self.num_frames = len(self.images)
 		self.frame_counter = 0
-		# We keep in mind the weapon's damage
-		self.damage = 50
 		# Loads the shotgun sound
 		self.game.sound.load_sound("shotgun", os.path.join(self.game.sound.sounds_path, "shotgun.wav"), "weapon")
+
+
+	def get_damage(self, distance: float) -> float:
+		"""
+		Returns the weapon's damage over range.
+		"""
+		return max(23, 50 / distance)
 
 
 	def animate_shot(self):
