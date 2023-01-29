@@ -59,7 +59,9 @@ class Game:
 		self.objects_handler = ObjectHandler(self)
 
 		# Loads the weapon
-		self.weapon = Pistol(self)
+		self.weapons = [Shotgun(self), Pistol(self)]
+		self.current_weapon = 0
+		self.weapon = self.weapons[self.current_weapon]
 
 		# Starts in 2D
 		self.is_3D: bool = False
@@ -79,6 +81,7 @@ class Game:
 		self.objects_handler.update()
 
 		# Updates the weapon
+		self.weapon = self.weapons[self.current_weapon]
 		self.weapon.update()
 
 		# Erases the pygame display
@@ -141,6 +144,16 @@ class Game:
 
 					# Hides the mouse if in 3D mode
 					pygame.mouse.set_visible(not pygame.mouse.get_visible())
+
+			if event.type == pygame.MOUSEBUTTONDOWN:
+				if event.button == 4:
+					self.current_weapon -= 1
+					if self.current_weapon < 0:
+						self.current_weapon = len(self.weapons) - 1
+				elif event.button == 5:
+					self.current_weapon += 1
+					if self.current_weapon >= len(self.weapons):
+						self.current_weapon = 0
 
 			# Allows the player to take a shot
 			if self.is_3D:
