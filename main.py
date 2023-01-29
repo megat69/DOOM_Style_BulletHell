@@ -11,7 +11,7 @@ from object_handler import ObjectHandler
 from weapon import Shotgun, Pistol
 from sounds import SoundHandler
 
-# TODO : Multiple weapons
+# TODO : Muzzle flashes
 # TODO : Normalize player movement direction
 # TODO : Enemies
 # TODO : Fireballs
@@ -144,7 +144,9 @@ class Game:
 
 					# Hides the mouse if in 3D mode
 					pygame.mouse.set_visible(not pygame.mouse.get_visible())
+					pygame.event.set_grab(not pygame.event.get_grab())
 
+			# Switches weapons based on mouse wheel
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				if event.button == 4:
 					self.current_weapon -= 1

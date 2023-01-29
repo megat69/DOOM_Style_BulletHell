@@ -14,7 +14,7 @@ class Weapon(AnimatedSprite):
 			self,
 			game,
 			path: str = 'assets/animated_sprites/shotgun/0.png',
-			scale: float = 0.4,
+			scale: float = 3,
 			animation_time: int = 80,
 			name: str = "shotgun"
 	):
@@ -94,7 +94,7 @@ class Shotgun(Weapon):
 	The shotgun.
 	"""
 	def __init__(self, game):
-		super().__init__(game, 'assets/animated_sprites/shotgun/0.png', 0.4, 80, "shotgun")
+		super().__init__(game, 'assets/animated_sprites/shotgun/0.png', 4, 70, "shotgun")
 
 
 class Pistol(Weapon):
@@ -102,7 +102,7 @@ class Pistol(Weapon):
 	A pistol.
 	"""
 	def __init__(self, game):
-		super().__init__(game, 'assets/animated_sprites/pistol/0.png', 3, name="pistol")
+		super().__init__(game, 'assets/animated_sprites/pistol/0.png', 3, 40, name="pistol")
 
 	def get_damage(self, distance: float):
 		"""
