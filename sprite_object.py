@@ -132,7 +132,7 @@ class AnimatedSprite(SpriteObject):
 		# Saves the path as a list
 		self.path = path.rsplit('/', 1)[0]
 		# Loads all images in the path
-		self.images = self.get_images(self.path)
+		self.animations = self.get_images(self.path)
 
 		# Remembers the value of the previous animation time and whether to trigger the animation
 		self.previous_animation_time = pygame.time.get_ticks()
@@ -145,7 +145,7 @@ class AnimatedSprite(SpriteObject):
 		"""
 		super().update()
 		self.check_animation_time()
-		self.animate(self.images)
+		self.animate(self.animations)
 
 
 	def get_images(self, path:str):
@@ -189,8 +189,9 @@ class AnimatedSprite(SpriteObject):
 		# If the next frame should be displayed
 		if self.play_animation:
 			# We rotate the queue and select the next frame as the current frame
-			images.rotate(-1)
-			self.image = images[0]
+			if isinstance(images, deque):
+				images.rotate(-1)
+				self.image = images[0]
 
 
 

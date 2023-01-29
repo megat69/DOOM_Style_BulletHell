@@ -27,7 +27,7 @@ class Weapon(AnimatedSprite):
 						self.image.get_width() * scale,
 						self.image.get_height() * scale
 					)
-				) for img in self.images
+				) for img in self.animations
 			]
 		)
 		# Gets the position to center the weapon on the screen
