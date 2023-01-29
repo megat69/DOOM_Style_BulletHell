@@ -10,6 +10,7 @@ class ObjectHandler:
 		self.game = game
 		self.sprites_list = []
 		self.entities = []
+		self.entity_positions = set()
 		self.entity_sprite_path = 'assets/entities/'
 		self.static_sprites_path = 'assets/sprites/'
 		self.animated_sprites_path = "assets/animated_sprites/"
@@ -18,13 +19,14 @@ class ObjectHandler:
 		self.add_sprite(SpriteObject(game))
 		self.add_sprite(AnimatedSprite(game))
 		self.add_sprite(Fireball(game))
-		self.add_sprite(Entity(game))
+		self.add_entity(Entity(game))
 
 
 	def update(self):
 		"""
 		Updates all sprites and entities in the game.
 		"""
+		self.entity_positions = {entity.map_pos for entity in self.entities if entity.alive}
 		[sprite.update() for sprite in self.sprites_list]
 		[entity.update() for entity in self.entities]
 

@@ -48,6 +48,40 @@ class Entity(AnimatedSprite):
 		super().update()
 		# self.draw_ray_cast()
 
+	def check_wall(self, x:int, y:int) -> bool:
+		"""
+		Checks whether given coordinates are intersecting with a wall within the world map.
+		"""
+		return (x, y) not in self.game.map.world_map
+
+
+	def check_wall_collisions(self, direction):
+		"""
+		Checks if the player is intersecting with a wall.
+		"""
+		if self.check_wall(int(self.x + direction.x * self.size), int(self.y)):
+			self.x += direction.x
+		if self.check_wall(int(self.x), int(self.y + direction.y * self.size)):
+			self.y += direction.y
+
+
+	def movement(self, direction: pygame.Vector2 = None):
+		"""
+		Makes the entity move.
+		"""
+		# Calculates what the next position is
+		if direction is None:
+			next_pos = self.game.player.map_pos
+			next_x, next_y = next_pos
+			angle = math.atan2(next_y + 0.5 - self.y, next_x + 0.5 - self.x)
+			if next_pos in self.game.objects_handler.entity_positions:
+				direction = pygame.Vector2(0, 0)
+			else:
+				direction = pygame.Vector2(math.cos(angle) * self.speed, math.sin(angle) * self.speed)
+
+		# If there is no wall collision and no other entity there already, moves in this direction
+		self.check_wall_collisions(direction)
+
 
 	def run_logic(self):
 		"""
@@ -59,8 +93,17 @@ class Entity(AnimatedSprite):
 
 			# Checks if the entity was hit
 			self.check_hit_by_player()
+
+			# If the entity was hit by a shot, plays the pain animation
 			if self.in_pain:
 				self.animate_pain()
+
+			# If it can see the player, plays the walking animation and chases the player
+			elif self.can_see_player:
+				self.animate(self.animations['walk'])
+				self.movement()
+
+			# Otherwise, just idles there
 			else:
 				self.animate(self.animations['idle'])
 

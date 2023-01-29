@@ -186,6 +186,9 @@ class AnimatedSprite(SpriteObject):
 		Animates the sprite.
 		:param images: The animation frames.
 		"""
+		if isinstance(images, str):
+			images = self.animations[images]
+
 		# If the next frame should be displayed
 		if self.play_animation:
 			# We rotate the queue and select the next frame as the current frame
