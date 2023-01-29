@@ -19,7 +19,9 @@ class ObjectHandler:
 		self.add_sprite(SpriteObject(game))
 		self.add_sprite(AnimatedSprite(game))
 		self.add_sprite(Fireball(game))
-		self.add_entity(Entity(game))
+		for _ in range(10):
+			from random import uniform
+			self.add_entity(Entity(game, pos=(uniform(1, 10), uniform(1, 10))))
 
 
 	def update(self):
