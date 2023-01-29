@@ -25,8 +25,8 @@ class Weapon(AnimatedSprite):
 				pygame.transform.smoothscale(
 					img,
 					(
-						self.image.get_width() * scale,
-						self.image.get_height() * scale
+						img.get_width() * scale,
+						img.get_height() * scale
 					)
 				) for img in self.animations
 			]
@@ -66,6 +66,10 @@ class Weapon(AnimatedSprite):
 			if self.play_animation:
 				self.images.rotate(-1)
 				self.image = self.images[0]
+				self.weapon_pos = (
+					SETTINGS.graphics.resolution[0] // 2 - self.images[0].get_width() // 2,
+					SETTINGS.graphics.resolution[1] - self.images[0].get_height()
+				)
 				self.frame_counter += 1
 
 				# If the animation is over, we reset its properties
