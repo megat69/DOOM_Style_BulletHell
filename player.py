@@ -90,6 +90,9 @@ class Player:
 		# Multiplies the direction by the delta time
 		direction *= speed
 
+		# Remembers if the player is moving
+		self.is_moving = direction != Vector2(0)
+
 		# Uses the calculated information to make the player move
 		self.check_wall_collisions(direction)
 
@@ -168,7 +171,7 @@ class Player:
 			self.shot = True
 			self.game.weapon.reloading = True
 			# Plays the firing sound
-			self.game.sound.loaded_sounds['shotgun'].play()
+			self.game.weapon.sound.play()
 
 
 	def update(self):

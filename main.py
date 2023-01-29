@@ -8,12 +8,11 @@ from player import Player
 from raycasting import RayCasting
 from object_renderer import ObjectRenderer
 from object_handler import ObjectHandler
-from weapon import Weapon
+from weapon import Shotgun, Pistol
 from sounds import SoundHandler
 
-# TODO : Head bobbing
-# TODO : Normalize player movement direction
 # TODO : Multiple weapons
+# TODO : Normalize player movement direction
 # TODO : Enemies
 # TODO : Fireballs
 # TODO : First map
@@ -60,7 +59,7 @@ class Game:
 		self.objects_handler = ObjectHandler(self)
 
 		# Loads the weapon
-		self.weapon = Weapon(self)
+		self.weapon = Pistol(self)
 
 		# Starts in 2D
 		self.is_3D: bool = False

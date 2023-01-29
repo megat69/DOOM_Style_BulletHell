@@ -15,7 +15,8 @@ class Weapon(AnimatedSprite):
 			game,
 			path: str = 'assets/animated_sprites/shotgun/0.png',
 			scale: float = 0.4,
-			animation_time: int = 80
+			animation_time: int = 80,
+			name: str = "shotgun"
 	):
 		super().__init__(game=game, path=path, scale=scale, animation_time=animation_time)
 		# Loads the images
@@ -41,7 +42,8 @@ class Weapon(AnimatedSprite):
 		self.num_frames = len(self.images)
 		self.frame_counter = 0
 		# Loads the shotgun sound
-		self.game.sound.load_sound("shotgun", os.path.join(self.game.sound.sounds_path, "shotgun.wav"), "weapon")
+		self.game.sound.load_sound(name, os.path.join(self.game.sound.sounds_path, f"{name}.wav"), "weapon")
+		self.sound = self.game.sound.loaded_sounds[name]
 
 
 	def get_damage(self, distance: float) -> float:
@@ -85,3 +87,26 @@ class Weapon(AnimatedSprite):
 		"""
 		self.check_animation_time()
 		self.animate_shot()
+
+
+class Shotgun(Weapon):
+	"""
+	The shotgun.
+	"""
+	def __init__(self, game):
+		super().__init__(game, 'assets/animated_sprites/shotgun/0.png', 0.4, 80, "shotgun")
+
+
+class Pistol(Weapon):
+	"""
+	A pistol.
+	"""
+	def __init__(self, game):
+		super().__init__(game, 'assets/animated_sprites/pistol/0.png', 5, name="pistol")
+
+	def get_damage(self, distance: float):
+		"""
+		The damage of the pistol.
+		"""
+		return 33 - distance
+
