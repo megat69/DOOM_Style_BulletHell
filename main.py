@@ -117,7 +117,7 @@ class Game:
 			# We calculate the view bobbing based on the elapsed time, the strength, and whether the player is moving
 			view_bobbing = math.sin(pygame.time.get_ticks() / 300) * 5 * SETTINGS.graphics.view_bobbing_strength * (
 					1 + self.player.is_moving
-			)
+			) + (2 * self.weapon.reloading)
 
 			# We blit the rendering surface onto the screen
 			self.screen.blit(self.rendering_surface, (0, view_bobbing * SETTINGS.graphics.view_bobbing))
