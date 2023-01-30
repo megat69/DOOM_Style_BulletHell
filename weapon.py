@@ -100,6 +100,9 @@ class Shotgun(Weapon):
 	def __init__(self, game):
 		super().__init__(game, 'assets/animated_sprites/shotgun/0.png', 4, 70, "shotgun")
 
+	def get_damage(self, distance: float) -> float:
+		return max(23, 40 / distance)
+
 
 class Pistol(Weapon):
 	"""
@@ -108,7 +111,7 @@ class Pistol(Weapon):
 	def __init__(self, game):
 		super().__init__(game, 'assets/animated_sprites/pistol/0.png', 3, 40, name="pistol")
 
-	def get_damage(self, distance: float):
+	def get_damage(self, distance: float) -> float:
 		"""
 		The damage of the pistol.
 		"""

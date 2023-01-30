@@ -11,8 +11,8 @@ from object_handler import ObjectHandler
 from weapon import Shotgun, Pistol
 from sounds import SoundHandler
 
-# TODO : Muzzle flashes
-# TODO : Normalize player movement direction
+# TODO : Ammo
+# TODO : Parallelise raycast ?
 # TODO : Enemies
 # TODO : Fireballs
 # TODO : First map

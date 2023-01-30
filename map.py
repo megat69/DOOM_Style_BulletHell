@@ -25,6 +25,7 @@ class Map:
 		"""
 		self.game = game
 		self.map = game_map
+		self.map_size = map_size
 		self.world_map = {}
 		self.get_map()
 

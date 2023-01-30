@@ -21,7 +21,7 @@ class ObjectHandler:
 		self.add_sprite(Fireball(game))
 		for _ in range(10):
 			from random import uniform
-			self.add_entity(Entity(game, pos=(uniform(1, 10), uniform(1, 10))))
+			self.add_entity(Entity(game, pos=(uniform(1, self.game.map.map_size[0]), uniform(1, self.game.map.map_size[1]))))
 
 
 	def update(self):
