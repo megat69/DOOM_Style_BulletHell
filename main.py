@@ -128,6 +128,17 @@ class Game:
 		pygame.display.set_caption(f"DOOM Style Bullet Hell - {self.clock.get_fps():.1f} FPS")
 
 
+	def get_weapon_by_name(self, name: str):
+		"""
+		Returns the weapon with the given name, and raises a NameError if not found.
+		"""
+		for element in self.weapons:
+			if element.name == name:
+				return element
+
+		raise NameError(f"Weapon '{name}' not found !")
+
+
 	def draw(self):
 		"""
 		Gets called every frame to draw the main sprites to the screen.

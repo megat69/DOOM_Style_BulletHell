@@ -1,8 +1,9 @@
 import pygame
 import math
+from random import randint
 
 from settings import SETTINGS
-from sprite_object import AnimatedSprite
+from sprite_object import AnimatedSprite, Ammo
 
 
 class Entity(AnimatedSprite):
@@ -162,7 +163,15 @@ class Entity(AnimatedSprite):
 			self.alive = False
 			self.game.sound.loaded_sounds["death"].play()
 			# Gives the player ammo
-			self.game.weapon.ammo += 2 * (1 + self.game.current_weapon)
+			self.game.objects_handler.add_sprite(
+				Ammo(
+					self.game, f'assets/textures/pickups/{self.game.weapon.name}.png',
+					(self.x, self.y), self.game.weapon.name, randint(
+						Ammo.BASE_GAIN[self.game.weapon.name][0],
+						Ammo.BASE_GAIN[self.game.weapon.name][1]
+					)
+				)
+			)
 
 	@property
 	def map_pos(self):

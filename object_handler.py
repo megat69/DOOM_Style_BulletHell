@@ -33,7 +33,7 @@ class ObjectHandler:
 		[entity.update() for entity in self.entities]
 
 
-	def add_sprite(self, sprite):
+	def add_sprite(self, sprite: SpriteObject):
 		"""
 		Adds a sprite to the handler.
 		:param sprite: The sprite to add.
@@ -41,7 +41,7 @@ class ObjectHandler:
 		self.sprites_list.append(sprite)
 
 
-	def add_entity(self, entity):
+	def add_entity(self, entity: Entity):
 		"""
 		Adds an entity to the handler.
 		:param entity: The entity to add.

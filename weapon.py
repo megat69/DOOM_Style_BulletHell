@@ -17,7 +17,8 @@ class Weapon(AnimatedSprite):
 			scale: float = 3,
 			animation_time: int = 80,
 			name: str = "shotgun",
-			starting_ammo: int = 18
+			starting_ammo: int = 18,
+			max_ammo: int = 18
 	):
 		super().__init__(game=game, path=path, scale=scale, animation_time=animation_time)
 		# Loads the images
@@ -47,6 +48,9 @@ class Weapon(AnimatedSprite):
 		self.sound = self.game.sound.loaded_sounds[name]
 		# Keeps the ammo count
 		self._ammo = starting_ammo
+		self.max_ammo = max_ammo
+		# Keeps the name of the weapon
+		self.name = name
 
 
 	def get_damage(self, distance: float) -> float:
@@ -112,11 +116,12 @@ class Shotgun(Weapon):
 		super().__init__(
 			game, 'assets/animated_sprites/shotgun/0.png', 4, 70,
 			"shotgun",
-			starting_ammo=18
+			starting_ammo=18,
+			max_ammo=18
 		)
 
 	def get_damage(self, distance: float) -> float:
-		return max(23, 30 / distance)
+		return max(23, 70 / distance)
 
 
 class Pistol(Weapon):
@@ -127,7 +132,8 @@ class Pistol(Weapon):
 		super().__init__(
 			game, 'assets/animated_sprites/pistol/0.png', 3, 40,
 			name="pistol",
-			starting_ammo=25
+			starting_ammo=24,
+			max_ammo=24
 		)
 
 	def get_damage(self, distance: float) -> float:
