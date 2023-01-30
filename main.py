@@ -194,6 +194,11 @@ class Game:
 					pygame.mouse.set_visible(not pygame.mouse.get_visible())
 					pygame.event.set_grab(not pygame.event.get_grab())
 
+				elif event.key in SETTINGS.controls.number_keys:
+					event.key -= SETTINGS.controls.number_keys[0]
+					if event.key < len(self.weapons):
+						self.current_weapon = event.key
+
 			# Switches weapons based on mouse wheel
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				if event.button == 4:

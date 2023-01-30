@@ -14,7 +14,8 @@
 		"sprite_size_2D": 64,
 		"advanced_depth_darkening": true,
 		"view_bobbing": true,
-		"view_bobbing_strength": 1.0
+		"view_bobbing_strength": 1.0,
+		"show_FPS": true
 	},
 	"player": {
 		"pos": [1.5, 5],
@@ -30,7 +31,8 @@
 		"right": "d",
 		"perspective_change": "space",
 		"fire": "e",
-		"sensitivity": 0.00015,
+		"number_keys": [49, 50, 51, 52, 53, 54, 55, 56, 57],
+		"sensitivity": 0.000125,
 		"mouse_max_rel": 40,
 		"mouse_border_left": 100,
 		"mouse_border_right": null
