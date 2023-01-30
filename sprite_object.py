@@ -15,7 +15,8 @@ class SpriteObject:
 		pos: tuple = (10.5, 3.5),
 		scale: float = 1.0,
 		shift: int = 0.27,
-		hidden: bool = False
+		hidden: bool = False,
+		darken: bool = False
 	):
 		"""
 		Creates a new sprite instance.
@@ -34,6 +35,7 @@ class SpriteObject:
 		self.SPRITE_HEIGHT_SHIFT = shift
 		self.culling_distance = 0.35  # How far away from the camera to cull the sprite
 		self.hidden = hidden  # Whether the sprite should be hidden in 2D view
+		self.darken = darken  # Whether to darken ythe sprite over distance
 		# Initialization of later attributes
 		self.theta, self.screen_x, self.dist, self.norm_dist = 0, 0, 1, 1
 		self.sprite_half_width = 0
@@ -86,7 +88,13 @@ class SpriteObject:
 		pos = self.screen_x - self.sprite_half_width, SETTINGS.graphics.resolution[1] // 2 - proj_height // 2 + height_shift
 
 		# Adds the sprite to the array of objects to render during raycasting
-		self.game.raycasting.objects_to_render.append((self.norm_dist, image.convert_alpha(), pos))
+		self.game.raycasting.objects_to_render.append((
+			self.norm_dist,
+			image.convert_alpha() if self.darken is False else self.game.raycasting.darken(
+				image, self.norm_dist
+			),
+			pos
+		))
 
 
 	def render_2D_sprite(self):
@@ -126,10 +134,11 @@ class AnimatedSprite(SpriteObject):
 		scale: float = 0.8,
 		shift: int = 0.27,
 		animation_time: int = 120,
-		hidden: bool = False
+		hidden: bool = False,
+		darken: bool = False
 	):
 		# Calls the superclass
-		super().__init__(game, path, pos, scale, shift, hidden)
+		super().__init__(game, path, pos, scale, shift, hidden, darken)
 		# Saves the animation time
 		self.animation_time = animation_time
 		# Saves the path as a list

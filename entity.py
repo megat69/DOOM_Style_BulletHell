@@ -16,7 +16,7 @@ class Entity(AnimatedSprite):
 			shift: int = 0.38,
 			animation_time: int = 180
 	):
-		super().__init__(game, path, pos, scale, shift, animation_time, hidden=True)
+		super().__init__(game, path, pos, scale, shift, animation_time, hidden=True, darken=True)
 		# Loads all images for each state
 		self.animations = {
 			'attack': self.get_images(self.path + '/attack'),
