@@ -142,3 +142,42 @@ class Pistol(Weapon):
 		"""
 		return 33 - distance
 
+
+class Fist(Weapon):
+	def __init__(self, game):
+		super().__init__(
+			game, 'assets/animated_sprites/fists/0.png', 3, 30,
+			name="fist",
+			starting_ammo=1,
+			max_ammo=1
+		)
+
+	def get_damage(self, distance: float) -> float:
+		return 100 if distance < 0.75 else 0
+
+	def animate_shot(self):
+		"""
+		Animates the weapon after the player has tried to hit the enemy.
+		"""
+		# If we are reloading
+		if self.reloading:
+			# We set the player's shot value to False
+			self.game.player.shot = False
+
+			# If the animation is playing, we perform the animation
+			if self.play_animation:
+				self.images.rotate(-1)
+				self.image = self.images[0]
+				self.weapon_pos = (
+					SETTINGS.graphics.resolution[0] // 2 - self.images[0].get_width() // 2,
+					SETTINGS.graphics.resolution[1] - self.images[0].get_height()
+				)
+				self.frame_counter += 1
+
+				# If the animation is over, we reset its properties
+				if self.frame_counter == self.num_frames:
+					self.ammo += 1
+					self.reloading = False
+					self.frame_counter = 0
+					# Sets the weapon back to the current weapon
+					self.game.weapon = self.game.weapons[self.game.current_weapon]

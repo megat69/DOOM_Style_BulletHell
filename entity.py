@@ -1,6 +1,7 @@
 import pygame
 import math
-from random import randint
+from random import randint, choice
+import time
 
 from settings import SETTINGS
 from sprite_object import AnimatedSprite, Ammo
@@ -110,6 +111,9 @@ class Entity(AnimatedSprite):
 				self.animate(self.animations['idle'])
 
 		else:
+			if time.time() - self._death_time > 15:
+				self.game.objects_handler.entities.remove(self)
+				return None
 			self.animate_death()
 
 
@@ -162,16 +166,32 @@ class Entity(AnimatedSprite):
 		if self.health < 1:
 			self.alive = False
 			self.game.sound.loaded_sounds["death"].play()
+			# Creates the death time
+			self._death_time = time.time()
 			# Gives the player ammo
-			self.game.objects_handler.add_sprite(
-				Ammo(
-					self.game, f'assets/textures/pickups/{self.game.weapon.name}.png',
-					(self.x, self.y), self.game.weapon.name, randint(
-						Ammo.BASE_GAIN[self.game.weapon.name][0],
-						Ammo.BASE_GAIN[self.game.weapon.name][1]
+			if self.game.weapon.name != "fist":
+				self.game.objects_handler.add_sprite(
+					Ammo(
+						self.game, f'assets/textures/pickups/{self.game.weapon.name}.png',
+						(self.x, self.y), self.game.weapon.name, randint(
+							Ammo.BASE_GAIN[self.game.weapon.name][0],
+							Ammo.BASE_GAIN[self.game.weapon.name][1]
+						)
 					)
 				)
-			)
+			else:
+				chosen_weapon = choice(self.game.weapons)
+				while chosen_weapon is self.game.get_weapon_by_name("fist"):
+					chosen_weapon = choice(self.game.weapons)
+				self.game.objects_handler.add_sprite(
+					Ammo(
+						self.game, f'assets/textures/pickups/{chosen_weapon.name}.png',
+						(self.x, self.y), chosen_weapon.name, randint(
+							Ammo.BASE_GAIN[chosen_weapon.name][0],
+							Ammo.BASE_GAIN[chosen_weapon.name][1]
+						)
+					)
+				)
 
 	@property
 	def map_pos(self):

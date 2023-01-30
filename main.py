@@ -9,7 +9,7 @@ from player import Player
 from raycasting import RayCasting
 from object_renderer import ObjectRenderer
 from object_handler import ObjectHandler
-from weapon import Shotgun, Pistol
+from weapon import Shotgun, Pistol, Fist
 from sounds import SoundHandler
 from UI import UI
 from entity import Entity
@@ -63,7 +63,7 @@ class Game:
 		self.objects_handler = ObjectHandler(self)
 
 		# Loads the weapon
-		self.weapons = [Shotgun(self), Pistol(self)]
+		self.weapons = [Shotgun(self), Pistol(self), Fist(self)]
 		self.current_weapon = 0
 		self.weapon = self.weapons[self.current_weapon]
 
@@ -194,18 +194,24 @@ class Game:
 					pygame.mouse.set_visible(not pygame.mouse.get_visible())
 					pygame.event.set_grab(not pygame.event.get_grab())
 
+				# Weapon change
 				elif event.key in SETTINGS.controls.number_keys:
 					event.key -= SETTINGS.controls.number_keys[0]
 					if event.key < len(self.weapons):
 						self.current_weapon = event.key
 
+				# Melee
+				elif event.key == getattr(pygame, f"K_{SETTINGS.controls.melee}"):
+					self.weapon = self.get_weapon_by_name("fist")
+					self.current_weapon = self.weapons.index(self.weapon)
+
 			# Switches weapons based on mouse wheel
 			if event.type == pygame.MOUSEBUTTONDOWN:
-				if event.button == 4:
+				if event.button == 5:
 					self.current_weapon -= 1
 					if self.current_weapon < 0:
 						self.current_weapon = len(self.weapons) - 1
-				elif event.button == 5:
+				elif event.button == 4:
 					self.current_weapon += 1
 					if self.current_weapon >= len(self.weapons):
 						self.current_weapon = 0

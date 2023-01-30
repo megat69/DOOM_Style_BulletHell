@@ -3,6 +3,7 @@ from pygame.math import Vector2
 import math
 import os
 from collections import deque
+import time
 
 from settings import SETTINGS
 
@@ -237,6 +238,7 @@ class Pickup(SpriteObject):
 		super().__init__(game, path, pos, scale, shift)
 		self.picked_up = False
 		self.pickup_distance = pickup_distance
+		self._creation_time = time.time()
 
 	def update(self):
 		"""
@@ -260,7 +262,8 @@ class Pickup(SpriteObject):
 class Ammo(Pickup):
 	BASE_GAIN = {
 		"pistol": (2, 5),
-		"shotgun": (2, 3)
+		"shotgun": (2, 3),
+		"fist": (0, 0)
 	}
 	def __init__(
 			self,
@@ -268,11 +271,14 @@ class Ammo(Pickup):
 			path: str = 'assets/textures/pickups/pistol.png',
 			pos: tuple = (10.5, 4.5),
 			ammo_type: str = "pistol",
-			ammo_gain: int = 4
+			ammo_gain: int = 4,
+			time_to_disappear: int = 30
 	):
 		super().__init__(game, path, pos, 0.1, 5)
 		self.ammo_type = ammo_type
 		self.ammo_gain = ammo_gain
+		self.time_to_disappear = time_to_disappear  # If set to None, will not disappear
+		self._creation_time = time.time()
 
 
 	def update(self):
@@ -283,6 +289,12 @@ class Ammo(Pickup):
 			self.get_sprite()
 		elif self.hidden is False:
 			self.render_2D_sprite()
+
+		# Destroys the entity
+		if self.time_to_disappear is not None and \
+				time.time() - self._creation_time > self.time_to_disappear:
+			self.game.objects_handler.sprites_list.remove(self)
+			return None
 
 		if (round(self.player.x, 1) - self.pickup_distance < self.x < round(self.player.x, 1) + self.pickup_distance) and \
 				(round(self.player.y, 1) - self.pickup_distance < self.y < round(self.player.y, 1) + self.pickup_distance):
