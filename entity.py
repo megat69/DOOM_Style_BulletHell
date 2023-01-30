@@ -37,6 +37,7 @@ class Entity(AnimatedSprite):
 		self.can_see_player = False
 		self.frame_counter = 0
 		self.player_distance = 1
+		self.culling_distance = 0.2
 
 		# Loads the pain sound
 		self.game.sound.load_sound("pain", self.game.sound.sounds_path + 'npc_pain.wav', "entity")

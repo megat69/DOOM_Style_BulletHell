@@ -39,7 +39,7 @@ class Player:
 		direction = Vector2(0)
 
 		# Calculating the player's speed based on its default speed and the delta time
-		speed = SETTINGS.player.speed * self.game.delta_time
+		speed = SETTINGS.player.speed * self.game.weapon.speed_multiplier * self.game.delta_time
 
 		# Precalculating the values of sine and cosine of the speed and angle
 		speed_sin = speed * sin_a

@@ -18,7 +18,8 @@ class Weapon(AnimatedSprite):
 			animation_time: int = 80,
 			name: str = "shotgun",
 			starting_ammo: int = 18,
-			max_ammo: int = 18
+			max_ammo: int = 18,
+			speed_multiplier: float = 0.75
 	):
 		super().__init__(game=game, path=path, scale=scale, animation_time=animation_time)
 		# Loads the images
@@ -51,6 +52,8 @@ class Weapon(AnimatedSprite):
 		self.max_ammo = max_ammo
 		# Keeps the name of the weapon
 		self.name = name
+		# Keeps the speed multiplier
+		self.speed_multiplier = speed_multiplier
 
 
 	def get_damage(self, distance: float) -> float:
@@ -117,7 +120,8 @@ class Shotgun(Weapon):
 			game, 'assets/animated_sprites/shotgun/0.png', 4, 70,
 			"shotgun",
 			starting_ammo=18,
-			max_ammo=18
+			max_ammo=18,
+			speed_multiplier=0.95
 		)
 
 	def get_damage(self, distance: float) -> float:
@@ -133,7 +137,8 @@ class Pistol(Weapon):
 			game, 'assets/animated_sprites/pistol/0.png', 3, 40,
 			name="pistol",
 			starting_ammo=24,
-			max_ammo=24
+			max_ammo=24,
+			speed_multiplier=1.02
 		)
 
 	def get_damage(self, distance: float) -> float:
@@ -149,7 +154,8 @@ class Fist(Weapon):
 			game, 'assets/animated_sprites/fists/0.png', 3, 30,
 			name="fist",
 			starting_ammo=1,
-			max_ammo=1
+			max_ammo=1,
+			speed_multiplier=1.1
 		)
 
 	def get_damage(self, distance: float) -> float:
