@@ -1,6 +1,7 @@
 import pygame
 import sys
 import math
+from random import randint, uniform
 
 from settings import SETTINGS
 from map import Map
@@ -11,8 +12,10 @@ from object_handler import ObjectHandler
 from weapon import Shotgun, Pistol
 from sounds import SoundHandler
 from UI import UI
+from entity import Entity
 
 # TODO : Ammo
+# TODO : Melee
 # TODO : Parallelise raycast ?
 # TODO : Enemies
 # TODO : Fireballs
@@ -70,7 +73,7 @@ class Game:
 		# Loads the UI
 		self.UI = UI(self)
 		def update_framerate_ui_element(game, ui_element):
-			ui_element["text"] = str(round(game.clock.get_fps()))
+			ui_element["text"] = str(round(game.clock.get_fps())) if SETTINGS.graphics.show_FPS else ""
 		self.UI.create_UI_element(
 			"framerate", "", "Impact", 20, update_framerate_ui_element,
 			(10, 10),
@@ -104,6 +107,13 @@ class Game:
 
 		# Updates the UI
 		self.UI.update()
+
+		# Infinitely spawns enemies cuz why not
+		if randint(0, 300) == 0:
+			print("Spawned enemy")
+			self.objects_handler.add_entity(
+				Entity(game, pos=(uniform(1, self.map.map_size[0]), uniform(1, self.map.map_size[1])))
+			)
 
 		"""self.screen.blit(self.raycasting._masking_surface, (0, 0), None, pygame.BLEND_RGBA_MULT)
 		self.raycasting._masking_surface.fill('black')"""

@@ -116,7 +116,7 @@ class Shotgun(Weapon):
 		)
 
 	def get_damage(self, distance: float) -> float:
-		return max(23, 40 / distance)
+		return max(23, 30 / distance)
 
 
 class Pistol(Weapon):

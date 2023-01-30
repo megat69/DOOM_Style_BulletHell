@@ -157,9 +157,12 @@ class Entity(AnimatedSprite):
 		"""
 		Checks if the entity is still alive.
 		"""
+		# Kills the entity if the health drops below zero
 		if self.health < 1:
 			self.alive = False
 			self.game.sound.loaded_sounds["death"].play()
+			# Gives the player ammo
+			self.game.weapon.ammo += 2 * (1 + self.game.current_weapon)
 
 	@property
 	def map_pos(self):
