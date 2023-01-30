@@ -37,7 +37,6 @@ class Entity(AnimatedSprite):
 		self.in_pain = False
 		self.can_see_player = False
 		self.frame_counter = 0
-		self.player_distance = 1
 		self.culling_distance = 0.2
 
 		# Loads the pain sound
@@ -156,7 +155,10 @@ class Entity(AnimatedSprite):
 				self.in_pain = True
 
 				# We decrease the entity's health by the weapon damage
-				self.health -= self.game.weapon.get_damage(self.player_distance)
+				self.health -= self.game.weapon.get_damage(
+					# We calculate the distance between the entity and the player
+					math.sqrt(((self.x - self.game.player.x) ** 2) + ((self.y - self.game.player.y) ** 2))
+				)
 				self.check_health()
 
 
@@ -291,7 +293,6 @@ class Entity(AnimatedSprite):
 		wall_distance = max(wall_distance_vertical, wall_distance_horizontal)
 
 		# Returns whether there is a direct line of sight between the NPC and the player
-		self.player_distance = player_distance
 		if 0 < player_distance < wall_distance or not wall_distance:
 			return True
 		else:
