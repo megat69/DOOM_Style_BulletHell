@@ -262,7 +262,7 @@ class Pickup(SpriteObject):
 class Ammo(Pickup):
 	BASE_GAIN = {
 		"pistol": (2, 5),
-		"shotgun": (2, 3),
+		"shotgun": (1, 2),
 		"fist": (0, 0)
 	}
 	def __init__(

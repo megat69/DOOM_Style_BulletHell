@@ -8,8 +8,8 @@ from settings import SETTINGS
 map_size = tuple(map(lambda x: x // SETTINGS.graphics.tile_size, SETTINGS.graphics.resolution))
 # Generates the map with its boundaries
 game_map = [
-	[(1 + (1 if randint(0, 5) == 0 or not (row in (0, map_size[1] - 1) or column in (0, map_size[0] - 1)) else 0)) if row in (0, map_size[1] - 1) or column in (0, map_size[0] - 1) or randint(0, 5) == 5 else False for column in range(map_size[0])]
-	# [1 if row in (0, map_size[1] - 1) or column in (0, map_size[0] - 1) else 0 for column in range(map_size[0])]
+	# [(1 + (1 if randint(0, 5) == 0 or not (row in (0, map_size[1] - 1) or column in (0, map_size[0] - 1)) else 0)) if row in (0, map_size[1] - 1) or column in (0, map_size[0] - 1) or randint(0, 5) == 5 else False for column in range(map_size[0])]
+	[1 if row in (0, map_size[1] - 1) or column in (0, map_size[0] - 1) else 0 for column in range(map_size[0])]
 	for row in range(map_size[1])
 ]
 

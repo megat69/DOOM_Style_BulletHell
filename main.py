@@ -14,8 +14,6 @@ from sounds import SoundHandler
 from UI import UI
 from entity import Entity
 
-# TODO : Ammo
-# TODO : Melee
 # TODO : Parallelise raycast ?
 # TODO : Enemies
 # TODO : Fireballs
@@ -109,7 +107,7 @@ class Game:
 		self.UI.update()
 
 		# Infinitely spawns enemies cuz why not
-		if randint(0, 300) == 0:
+		if randint(0, 170) == 0:
 			print("Spawned enemy")
 			self.objects_handler.add_entity(
 				Entity(game, pos=(uniform(1, self.map.map_size[0]), uniform(1, self.map.map_size[1])))

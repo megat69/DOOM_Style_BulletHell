@@ -151,7 +151,7 @@ class Pistol(Weapon):
 class Fist(Weapon):
 	def __init__(self, game):
 		super().__init__(
-			game, 'assets/animated_sprites/fists/0.png', 3, 30,
+			game, 'assets/animated_sprites/fists/0.png', 3, 100,
 			name="fist",
 			starting_ammo=1,
 			max_ammo=1,
