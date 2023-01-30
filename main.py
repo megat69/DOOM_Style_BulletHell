@@ -84,6 +84,9 @@ class Game:
 		self.weapon = self.weapons[self.current_weapon]
 		self.weapon.update()
 
+		"""self.screen.blit(self.raycasting._masking_surface, (0, 0), None, pygame.BLEND_RGBA_MULT)
+		self.raycasting._masking_surface.fill('black')"""
+
 		# Erases the pygame display
 		pygame.display.flip()
 

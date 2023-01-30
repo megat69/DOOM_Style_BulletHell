@@ -1,6 +1,5 @@
 import pygame
 import math
-from numba import jit
 
 from settings import SETTINGS
 
@@ -23,6 +22,8 @@ class RayCasting:
 
 		# A pointer towards the wall textures
 		self.wall_textures = self.game.object_renderer.wall_textures
+
+		self._masking_surface = self.game.screen.copy()
 
 
 	def get_objects_to_render(self):
@@ -195,10 +196,16 @@ class RayCasting:
 			# Draws the raycast for debug purposes
 			# if self.game.is_3D is False:
 			# 	pygame.draw.line(
-			# 		self.game.screen,
-			# 		'yellow',
-			# 		(SETTINGS.graphics.tile_size * original_position_x, SETTINGS.graphics.tile_size * original_position_y),
-			# 		(SETTINGS.graphics.tile_size * original_position_x + SETTINGS.graphics.tile_size * depth * cos_a, SETTINGS.graphics.tile_size * original_position_y + SETTINGS.graphics.tile_size * depth * sin_a),
+			# 		self._masking_surface,
+			# 		'white',
+			# 		(
+			# 			SETTINGS.graphics.tile_size * original_position_x,
+			# 			SETTINGS.graphics.tile_size * original_position_y
+			# 		),
+			# 		(
+			# 			SETTINGS.graphics.tile_size * original_position_x + SETTINGS.graphics.tile_size * depth * cos_a,
+			# 			SETTINGS.graphics.tile_size * original_position_y + SETTINGS.graphics.tile_size * depth * sin_a
+			# 		),
 			# 		2
 			# 	)
 
