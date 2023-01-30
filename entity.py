@@ -8,6 +8,7 @@ from sprite_object import AnimatedSprite, Ammo
 
 
 class Entity(AnimatedSprite):
+	killed_entities = 0
 	def __init__(
 			self,
 			game,
@@ -167,6 +168,8 @@ class Entity(AnimatedSprite):
 		if self.health < 1:
 			self.alive = False
 			self.game.sound.loaded_sounds["death"].play()
+			# Counts the dead
+			Entity.killed_entities += 1
 			# Creates the death time
 			self._death_time = time.time()
 			# Gives the player ammo

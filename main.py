@@ -84,6 +84,13 @@ class Game:
 			(10, SETTINGS.graphics.resolution[1] - 50),
 			(255, 255, 0)
 		)
+		def update_killed_ui_element(game, ui_element):
+			ui_element["text"] = str(Entity.killed_entities)
+		self.UI.create_UI_element(
+			"killed", "", "Impact", 30, update_killed_ui_element,
+			(SETTINGS.graphics.resolution[0] -50, SETTINGS.graphics.resolution[1] - 50),
+			(0, 128, 255)
+		)
 
 
 	def update(self):

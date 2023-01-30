@@ -37,7 +37,7 @@ class ObjectRenderer:
 		"""
 		if self.game.is_3D:
 			# Gets the offset of the sky texture
-			self.sky_offset = (self.sky_offset + 2.0 * self.game.player.rel) % SETTINGS.graphics.resolution[0]
+			self.sky_offset = (self.sky_offset + 0.75 * self.game.player.rel) % SETTINGS.graphics.resolution[0]
 
 			# Draws two sky textures, each being slightly offset so it matches the perspective
 			self.screen.blit(self.sky_texture, (-self.sky_offset, 0))
