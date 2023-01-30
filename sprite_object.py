@@ -86,7 +86,7 @@ class SpriteObject:
 		pos = self.screen_x - self.sprite_half_width, SETTINGS.graphics.resolution[1] // 2 - proj_height // 2 + height_shift
 
 		# Adds the sprite to the array of objects to render during raycasting
-		self.game.raycasting.objects_to_render.append((self.norm_dist, image, pos))
+		self.game.raycasting.objects_to_render.append((self.norm_dist, image.convert_alpha(), pos))
 
 
 	def render_2D_sprite(self):

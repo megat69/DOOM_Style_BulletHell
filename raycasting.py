@@ -67,7 +67,7 @@ class RayCasting:
 			wall_column = self.darken(wall_column, depth)
 
 			# Adds the object to the list of objects to render
-			self.objects_to_render.append((depth, wall_column, wall_pos))
+			self.objects_to_render.append((depth, wall_column.convert(), wall_pos))
 
 
 	def darken(self, surf: pygame.Surface, depth: float, multiplier: float = 2) -> pygame.Surface:
