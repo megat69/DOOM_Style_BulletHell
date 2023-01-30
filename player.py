@@ -167,11 +167,13 @@ class Player:
 		"""
 		if ((event.type == pygame.MOUSEBUTTONDOWN and event.button == 1) or
 				(event.type == pygame.KEYDOWN and event.key == getattr(pygame, f"K_{SETTINGS.controls.fire}"))) \
-				and (self.shot or self.game.weapon.reloading) is False:
+				and (self.shot or self.game.weapon.reloading) is False and self.game.weapon.ammo > 0:
 			self.shot = True
 			self.game.weapon.reloading = True
 			# Plays the firing sound
 			self.game.weapon.sound.play()
+			# Removes ammo from the gun
+			self.game.weapon.ammo -= 1
 
 
 	def update(self):
