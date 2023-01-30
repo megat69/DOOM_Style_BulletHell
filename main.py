@@ -10,6 +10,7 @@ from object_renderer import ObjectRenderer
 from object_handler import ObjectHandler
 from weapon import Shotgun, Pistol
 from sounds import SoundHandler
+from UI import UI
 
 # TODO : Ammo
 # TODO : Parallelise raycast ?
@@ -66,6 +67,23 @@ class Game:
 		# Starts in 2D
 		self.is_3D: bool = False
 
+		# Loads the UI
+		self.UI = UI(self)
+		def update_framerate_ui_element(game, ui_element):
+			ui_element["text"] = str(round(game.clock.get_fps()))
+		self.UI.create_UI_element(
+			"framerate", "", "Impact", 20, update_framerate_ui_element,
+			(10, 10),
+			(0, 255, 0)
+		)
+		def update_ammo_ui_element(game, ui_element):
+			ui_element["text"] = str(game.weapon.ammo)
+		self.UI.create_UI_element(
+			"ammo", "", "Impact", 30, update_ammo_ui_element,
+			(10, SETTINGS.graphics.resolution[1] - 50),
+			(255, 255, 0)
+		)
+
 
 	def update(self):
 		"""
@@ -83,6 +101,9 @@ class Game:
 		# Updates the weapon
 		self.weapon = self.weapons[self.current_weapon]
 		self.weapon.update()
+
+		# Updates the UI
+		self.UI.update()
 
 		"""self.screen.blit(self.raycasting._masking_surface, (0, 0), None, pygame.BLEND_RGBA_MULT)
 		self.raycasting._masking_surface.fill('black')"""
@@ -127,6 +148,9 @@ class Game:
 
 			# Draws the weapon
 			self.weapon.draw()
+
+			# Draws the UI
+			self.UI.draw()
 
 
 	def check_events(self):
