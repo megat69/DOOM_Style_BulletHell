@@ -33,42 +33,46 @@ class RayCasting:
 		self.objects_to_render.clear()
 
 		# Fetches all raycast results
+		# TODO : Can be parallelized
 		for ray, values in enumerate(self.ray_casting_result):
-			# Unpacks the result
-			depth, projection_height, texture, offset = values
+			self.get_object_to_render(ray, values)
 
-			# Gets the correct subportion of the wall to render
-			if projection_height < SETTINGS.graphics.resolution[1]:  # Normal execution if we're not too close to the wall
-				wall_column = self.wall_textures[texture].subsurface(
-					offset * (SETTINGS.graphics.texture_size - SETTINGS.graphics.scale),
-					0,
-					SETTINGS.graphics.scale,
-					SETTINGS.graphics.texture_size
-				)
+	def get_object_to_render(self, ray, values):
+		"""
+		Renders a single object.
+		"""
+		# Unpacks the result
+		depth, projection_height, texture, offset = values
+		# Gets the correct subportion of the wall to render
+		if projection_height < SETTINGS.graphics.resolution[1]:  # Normal execution if we're not too close to the wall
+			wall_column = self.wall_textures[texture].subsurface(
+				offset * (SETTINGS.graphics.texture_size - SETTINGS.graphics.scale),
+				0,
+				SETTINGS.graphics.scale,
+				SETTINGS.graphics.texture_size
+			)
 
-				# Calculates the correct column of the wall to render at the right size
-				wall_column = pygame.transform.scale(wall_column, (SETTINGS.graphics.scale, projection_height))
-				wall_pos = (ray * SETTINGS.graphics.scale, SETTINGS.graphics.half_height - projection_height // 2)
+			# Calculates the correct column of the wall to render at the right size
+			wall_column = pygame.transform.scale(wall_column, (SETTINGS.graphics.scale, projection_height))
+			wall_pos = (ray * SETTINGS.graphics.scale, SETTINGS.graphics.half_height - projection_height // 2)
 
-			else:  # If the size of the wall exceeds the window's height
-				texture_height = SETTINGS.graphics.texture_size * SETTINGS.graphics.resolution[1] / projection_height
-				wall_column = self.wall_textures[texture].subsurface(
-					offset * (SETTINGS.graphics.texture_size - SETTINGS.graphics.scale),
-					SETTINGS.graphics.half_texture_size - texture_height // 2,
-					SETTINGS.graphics.scale,
-					texture_height
-				)
+		else:  # If the size of the wall exceeds the window's height
+			texture_height = SETTINGS.graphics.texture_size * SETTINGS.graphics.resolution[1] / projection_height
+			wall_column = self.wall_textures[texture].subsurface(
+				offset * (SETTINGS.graphics.texture_size - SETTINGS.graphics.scale),
+				SETTINGS.graphics.half_texture_size - texture_height // 2,
+				SETTINGS.graphics.scale,
+				texture_height
+			)
 
-				# Calculates the correct column of the wall to render at the right size
-				wall_column = pygame.transform.scale(wall_column, (SETTINGS.graphics.scale, SETTINGS.graphics.resolution[1]))
-				wall_pos = (ray * SETTINGS.graphics.scale, 0)
-
-			# Darkens the wall column based on its distance with the camera
-			wall_column = self.darken(wall_column, depth)
-
-			# Adds the object to the list of objects to render
-			self.objects_to_render.append((depth, wall_column.convert(), wall_pos))
-
+			# Calculates the correct column of the wall to render at the right size
+			wall_column = pygame.transform.scale(wall_column,
+			                                     (SETTINGS.graphics.scale, SETTINGS.graphics.resolution[1]))
+			wall_pos = (ray * SETTINGS.graphics.scale, 0)
+		# Darkens the wall column based on its distance with the camera
+		wall_column = self.darken(wall_column, depth)
+		# Adds the object to the list of objects to render
+		self.objects_to_render.append((depth, wall_column.convert(), wall_pos))
 
 	def darken(self, surf: pygame.Surface, depth: float, multiplier: float = 2) -> pygame.Surface:
 		"""
