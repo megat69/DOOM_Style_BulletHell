@@ -1,7 +1,7 @@
 import pygame
 import sys
 import math
-from random import randint, uniform
+from random import randint, uniform, choice
 
 from settings import SETTINGS
 from map import Map
@@ -128,16 +128,19 @@ class Game:
 		self.UI.update()
 
 		# Infinitely spawns enemies cuz why not
-		if randint(0, 170) == 0:
+		if randint(0, 30) == 0:
 			# print("Spawned enemy")
 			# self.objects_handler.add_entity(
 			# 	Entity(game, pos=(uniform(1, self.map.map_size[0]), uniform(1, self.map.map_size[1])))
 			# )
-			self.objects_handler.add_sprite(
-				Fireball(
-					self, pos=(uniform(1, self.map.map_size[0]), uniform(1, self.map.map_size[1]))
+			try:
+				chosen_enemy = choice([enemy for enemy in self.objects_handler.entities if enemy.alive])
+				self.objects_handler.add_sprite(
+					Fireball(
+						self, pos=(chosen_enemy.x, chosen_enemy.y)
+					)
 				)
-			)
+			except IndexError: pass
 
 		"""self.screen.blit(self.raycasting._masking_surface, (0, 0), None, pygame.BLEND_RGBA_MULT)
 		self.raycasting._masking_surface.fill('black')"""
@@ -187,8 +190,6 @@ class Game:
 			view_bobbing = math.sin(pygame.time.get_ticks() / 300) * 5 * SETTINGS.graphics.view_bobbing_strength * (
 					1 + self.player.is_moving
 			) + (2 * self.weapon.reloading)
-			if self.player.health < 1:
-				view_bobbing -= 35
 
 			# We blit the rendering surface onto the screen
 			self.screen.blit(self.rendering_surface, (0, view_bobbing * (SETTINGS.graphics.view_bobbing or self.player.health < 1)))
@@ -196,8 +197,8 @@ class Game:
 			# Draws the weapon
 			self.weapon.draw()
 
-			# Draws the UI
-			self.UI.draw()
+		# Draws the UI
+		self.UI.draw()
 
 
 	def check_events(self):

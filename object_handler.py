@@ -1,3 +1,5 @@
+import pygame
+
 from sprite_object import SpriteObject, AnimatedSprite
 from fireball import Fireball
 from entity import Entity
@@ -19,10 +21,10 @@ class ObjectHandler:
 		# Sprite creation
 		self.add_sprite(SpriteObject(game))
 		self.add_sprite(AnimatedSprite(game))
-		self.add_sprite(Fireball(game))
+		self.add_sprite(Fireball(game, direction=pygame.math.Vector2(0, 0)))
 		for _ in range(10):
 			from random import uniform
-			self.add_entity(Entity(game, pos=(uniform(1, self.game.map.map_size[0]), uniform(1, self.game.map.map_size[1]))))
+			self.add_entity(Entity(game, pos=(uniform(1, self.game.map.map_size[0] - 1), uniform(1, self.game.map.map_size[1] - 1))))
 
 
 	def update(self):
