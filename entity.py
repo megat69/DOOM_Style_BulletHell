@@ -143,7 +143,7 @@ class Entity(AnimatedSprite):
 				self.movement()
 
 				# Notices how long the player has been in sight
-				if distance(self.x, self.game.player.x, self.y, self.game.player.y) < self.shooting_accurate_distance:
+				if distance(self.x, self.game.player.x, self.y, self.game.player.y) > self.shooting_accurate_distance:
 					self.player_close_by += self.game.delta_time
 
 				# If the player has been close to the entity too long, sending a fireball in his direction
