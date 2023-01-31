@@ -30,7 +30,7 @@ class Fireball(SpriteObject):
 		# Remembers the direction of the projectile
 		self.direction = direction
 		if self.direction is None:
-			self.direction = Vector2(uniform(-1, 1), uniform(-1, 1)) / randint(150, 200)
+			self.direction = Vector2(uniform(-1, 1), uniform(-1, 1)) / randint(200, 400)
 
 		# Remembers whether it clips through walls.
 		self.noclip = noclip
