@@ -15,7 +15,8 @@ from UI import UI
 from entity import Entity
 from fireball import Fireball
 
-
+# TODO : Bulle sans spawn
+# TODO : Contact attack if player too close too long
 # TODO : Parallelise raycast ?
 # TODO : First map
 class Game:
@@ -109,38 +110,29 @@ class Game:
 		"""
 		Runs every frame, contains the game's main logic.
 		"""
-		# Updates the player position
-		self.player.update()
+		if self.player.health > 0:
+			# Updates the player position
+			self.player.update()
 
-		# Updates the engine
-		self.raycasting.update()
+			# Updates the engine
+			self.raycasting.update()
 
-		# Updates the objects in the game
-		self.objects_handler.update()
+			# Updates the objects in the game
+			self.objects_handler.update()
 
-		# Updates the weapon
-		self.weapon = self.weapons[self.current_weapon]
-		self.weapon.update()
+			# Updates the weapon
+			self.weapon = self.weapons[self.current_weapon]
+			self.weapon.update()
 
-		# Updates the UI
-		self.UI.update()
+			# Updates the UI
+			self.UI.update()
 
-		# Infinitely spawns enemies cuz why not
-		if randint(0, 30) == 0:
-			if randint(0, 20) == 0:
+			# Infinitely spawns enemies and fireballs cuz why not
+			if randint(0, 100) == 0 and len(self.objects_handler.entities) < 15:
 				self.objects_handler.create_enemy()
-			try:
-				chosen_enemy = choice([enemy for enemy in self.objects_handler.entities if enemy.alive])
-				self.objects_handler.add_sprite(
-					Fireball(
-						self, pos=(chosen_enemy.x, chosen_enemy.y),
-						noclip=randint(0, 100) < 5
-					)
-				)
-			except IndexError: pass
 
-		"""self.screen.blit(self.raycasting._masking_surface, (0, 0), None, pygame.BLEND_RGBA_MULT)
-		self.raycasting._masking_surface.fill('black')"""
+			"""self.screen.blit(self.raycasting._masking_surface, (0, 0), None, pygame.BLEND_RGBA_MULT)
+			self.raycasting._masking_surface.fill('black')"""
 
 		# Erases the pygame display
 		pygame.display.flip()
@@ -209,6 +201,10 @@ class Game:
 				sys.exit(0)
 
 			if event.type == pygame.KEYDOWN:
+				if self.player.health < 1:
+					self.new_game()
+					return
+
 				# Monitors the perspective change
 				if event.key == getattr(pygame, f"K_{SETTINGS.controls.perspective_change.upper()}"):
 					# Toggles 3D mode
@@ -216,7 +212,7 @@ class Game:
 
 					# Hides the mouse if in 3D mode
 					pygame.mouse.set_visible(not pygame.mouse.get_visible())
-					pygame.event.set_grab(not pygame.event.get_grab())
+					pygame.event.set_grab(self.is_3D)
 
 				# Weapon change
 				elif event.key in SETTINGS.controls.number_keys:

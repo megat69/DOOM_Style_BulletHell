@@ -84,4 +84,6 @@ class Fireball(SpriteObject):
 		"""
 		Destroys the projectile.
 		"""
-		self.game.objects_handler.sprites_list.remove(self)
+		try:
+			self.game.objects_handler.sprites_list.remove(self)
+		except ValueError: pass

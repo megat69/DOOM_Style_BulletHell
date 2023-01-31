@@ -1,12 +1,14 @@
 import pygame
 import math
-from random import randint, choice
+from random import randint, choice, uniform
 import time
+from typing import Tuple, Union
 
 from settings import SETTINGS
 from sprite_object import AnimatedSprite
 from pickups import Ammo, Health
 from utils import distance
+from fireball import Fireball
 
 
 class Entity(AnimatedSprite):
@@ -18,8 +20,13 @@ class Entity(AnimatedSprite):
 			pos: tuple = (11.5, 5.5),
 			scale: float = 0.6,
 			shift: int = 0.38,
-			animation_time: int = 180
+			animation_time: int = 180,
+			time_to_fire: Union[Tuple[int, int], int] = (2400, 3000)
 	):
+		"""
+		:param time_to_fire: The time it takes for the entity to fire an aimed projectile at the player.
+		Can be either a tuple of two integers, and an int will be randomly chosen between them, a static integer value.
+		"""
 		super().__init__(game, path, pos, scale, shift, animation_time, hidden=True, darken=True)
 		# Loads all images for each state
 		self.animations = {
@@ -40,6 +47,12 @@ class Entity(AnimatedSprite):
 		self.can_see_player = False
 		self.frame_counter = 0
 		self.culling_distance = 0.2
+		self.player_close_by = 0
+		self.time_to_fire = randint(
+			time_to_fire[0], time_to_fire[1]
+		) if isinstance(time_to_fire, tuple) else time_to_fire
+		self.inaccuracy = 0.005
+		self.shooting_accurate_distance = 3
 
 		# Loads the pain sound
 		self.game.sound.load_sound("pain", self.game.sound.sounds_path + 'npc_pain.wav', "entity")
@@ -52,7 +65,9 @@ class Entity(AnimatedSprite):
 		self.check_animation_time()
 		self.run_logic()
 		super().update()
-		# self.draw_ray_cast()
+		if distance(self.x, self.player.x, self.y, self.player.y) < self.shooting_accurate_distance \
+				and self.game.is_3D is False:
+			self.draw_ray_cast(True)
 
 	def check_wall(self, x:int, y:int) -> bool:
 		"""
@@ -108,6 +123,44 @@ class Entity(AnimatedSprite):
 			elif self.can_see_player:
 				self.animate(self.animations['walk'])
 				self.movement()
+
+				# Notices how long the player has been in sight
+				if distance(self.x, self.game.player.x, self.y, self.game.player.y) < self.shooting_accurate_distance:
+					self.player_close_by += self.game.delta_time
+
+				# If the player has been close to the entity too long, sending a fireball in his direction
+				if self.player_close_by > self.time_to_fire:
+					self.game.objects_handler.sprites_list.append(
+						Fireball(
+							self.game,
+							pos = (self.x, self.y),
+							direction = pygame.math.Vector2(
+								self.player.x - self.x,
+								self.player.y - self.y
+							).normalize() / 300 + pygame.math.Vector2(
+								uniform(-self.inaccuracy, self.inaccuracy),
+								uniform(-self.inaccuracy, self.inaccuracy)
+							)
+						)
+					)
+					self.player_close_by = 0
+
+				# Random chance we spawn a fireball
+				elif randint(0, len(self.game.objects_handler.entities) * 8) == 0:
+					self.game.objects_handler.sprites_list.append(
+						Fireball(
+							self.game,
+							pos=(self.x, self.y),
+							direction=pygame.math.Vector2(
+								self.player.x - self.x,
+								self.player.y - self.y
+							).normalize() / 300 + pygame.math.Vector2(
+								uniform(-self.inaccuracy, self.inaccuracy),
+								uniform(-self.inaccuracy, self.inaccuracy)
+							),
+							noclip=randint(0, 100) < 5
+						)
+					)
 
 			# Otherwise, just idles there
 			else:
@@ -308,7 +361,22 @@ class Entity(AnimatedSprite):
 		else:
 			return False
 
-	def draw_ray_cast(self):
-		pygame.draw.circle(self.game.screen, 'red', (100 * self.x, 100 * self.y), 15)
+	def draw_ray_cast(self, normalized_ray_only: bool = False):
+		if not normalized_ray_only:
+			pygame.draw.circle(
+				self.game.screen, 'red', (
+					SETTINGS.graphics.tile_size * self.x,
+					SETTINGS.graphics.tile_size * self.y
+				), 15
+			)
+
 		if self.ray_cast_player_to_entity():
-			pygame.draw.line(self.game.screen, 'orange', (100 * self.game.player.x, 100 * self.game.player.y), (100 * self.x, 100 * self.y), 2)
+			pygame.draw.line(
+				self.game.screen, 'red', (
+					SETTINGS.graphics.tile_size * self.player.x,
+					SETTINGS.graphics.tile_size * self.player.y
+				), (
+					SETTINGS.graphics.tile_size * self.x,
+					SETTINGS.graphics.tile_size * self.y
+				), 2
+			)
