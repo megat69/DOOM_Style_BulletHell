@@ -163,6 +163,7 @@ class Player:
 			pygame.mouse.set_pos([SETTINGS.graphics.half_width, SETTINGS.graphics.half_height])
 		self.rel = pygame.mouse.get_rel()[0]
 		self.rel = max(-SETTINGS.controls.mouse_max_rel, min(SETTINGS.controls.mouse_max_rel, self.rel))
+		self.rel *= 1 + 4 * (not self.game.is_3D)
 		self.angle += self.rel * SETTINGS.controls.sensitivity * self.game.delta_time
 
 
@@ -200,9 +201,9 @@ class Player:
 		# Makes the player move correctly
 		if self.game.is_3D:
 			self.movement_3D()
-			self.mouse_control()
 		else:
 			self.movement_2D()
+		self.mouse_control()
 
 
 	@property
