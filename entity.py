@@ -5,7 +5,7 @@ import time
 
 from settings import SETTINGS
 from sprite_object import AnimatedSprite
-from pickups import Ammo
+from pickups import Ammo, Health
 from utils import distance
 
 
@@ -188,18 +188,26 @@ class Entity(AnimatedSprite):
 					)
 				)
 			else:
-				chosen_weapon = choice(self.game.weapons)
-				while chosen_weapon is self.game.get_weapon_by_name("fist"):
-					chosen_weapon = choice(self.game.weapons)
-				self.game.objects_handler.add_sprite(
-					Ammo(
-						self.game, f'assets/textures/pickups/{chosen_weapon.name}.png',
-						(self.x, self.y), chosen_weapon.name, randint(
-							Ammo.BASE_GAIN[chosen_weapon.name][0],
-							Ammo.BASE_GAIN[chosen_weapon.name][1]
+				if randint(0, 3) == 0:
+					self.game.objects_handler.add_sprite(
+						Health(
+							self.game,
+							pos=(self.x, self.y)
 						)
 					)
-				)
+				else:
+					chosen_weapon = choice(self.game.weapons)
+					while chosen_weapon is self.game.get_weapon_by_name("fist"):
+						chosen_weapon = choice(self.game.weapons)
+					self.game.objects_handler.add_sprite(
+						Ammo(
+							self.game, f'assets/textures/pickups/{chosen_weapon.name}.png',
+							(self.x, self.y), chosen_weapon.name, randint(
+								Ammo.BASE_GAIN[chosen_weapon.name][0],
+								Ammo.BASE_GAIN[chosen_weapon.name][1]
+							)
+						)
+					)
 
 	@property
 	def map_pos(self):
