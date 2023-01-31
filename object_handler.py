@@ -1,4 +1,5 @@
-from sprite_object import SpriteObject, AnimatedSprite, Fireball
+from sprite_object import SpriteObject, AnimatedSprite
+from fireball import Fireball
 from entity import Entity
 
 

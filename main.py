@@ -13,7 +13,8 @@ from weapon import Shotgun, Pistol, Fist
 from sounds import SoundHandler
 from UI import UI
 from entity import Entity
-from sprite_object import Fireball
+from fireball import Fireball
+
 
 # TODO : Parallelise raycast ?
 # TODO : Enemies

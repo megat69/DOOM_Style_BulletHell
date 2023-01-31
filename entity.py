@@ -4,7 +4,8 @@ from random import randint, choice
 import time
 
 from settings import SETTINGS
-from sprite_object import AnimatedSprite, Ammo
+from sprite_object import AnimatedSprite
+from pickups import Ammo
 from utils import distance
 
 
