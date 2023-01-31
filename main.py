@@ -91,6 +91,18 @@ class Game:
 			(SETTINGS.graphics.resolution[0] -50, SETTINGS.graphics.resolution[1] - 50),
 			(0, 128, 255)
 		)
+		def update_health_ui_element(game, ui_element):
+			ui_element["text"] = str(self.player.health)
+		self.UI.create_UI_element(
+			"health", "", "Impact", 30, update_health_ui_element,
+			(75, SETTINGS.graphics.resolution[1] - 50),
+			(255, 128, 0)
+		)
+		self.UI.create_UI_element(
+			"health_symbol", "❤", "segoeuisymbol", 30, lambda x, y: None,
+			(105, SETTINGS.graphics.resolution[1] - 50),
+			(255, 128, 0)
+		)
 
 
 	def update(self):

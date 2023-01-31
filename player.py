@@ -23,6 +23,9 @@ class Player:
 		# Keeping in mind if the player is moving
 		self.is_moving = False
 
+		# Keeps track of the player's health by setting it to the base health (setting)
+		self.health = SETTINGS.player.base_health
+
 		# Keeping in mind whether the player has shot
 		self.shot = False
 
