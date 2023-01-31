@@ -22,7 +22,7 @@
 		"angle": 0,
 		"speed": 0.003,
 		"rotation_speed": 0.0018,
-		"player_size_scale": 50,
+		"player_size_scale": 25,
 		"base_health": 3
 	},
 	"controls": {
