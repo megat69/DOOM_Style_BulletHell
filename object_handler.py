@@ -1,4 +1,5 @@
 import pygame
+from random import uniform
 
 from sprite_object import SpriteObject, AnimatedSprite
 from fireball import Fireball
@@ -23,12 +24,7 @@ class ObjectHandler:
 		self.add_sprite(AnimatedSprite(game))
 		self.add_sprite(Fireball(game, direction=pygame.math.Vector2(0, 0)))
 		for _ in range(10):
-			from random import uniform
-			self.add_entity(Entity(game, pos=(uniform(1, self.game.map.map_size[0] - 1), uniform(1, self.game.map.map_size[1] - 1))))
-			while self.entities[-1].check_wall(self.entities[-1].x, self.entities[-1].y) is False:
-				self.entities[-1].x = uniform(1, self.game.map.map_size[0] - 1)
-				self.entities[-1].y = uniform(1, self.game.map.map_size[0] - 1)
-
+			self.create_enemy()
 
 	def update(self):
 		"""
@@ -37,7 +33,6 @@ class ObjectHandler:
 		self.entity_positions = {entity.map_pos for entity in self.entities if entity.alive}
 		[sprite.update() for sprite in self.sprites_list]
 		[entity.update() for entity in self.entities]
-
 
 	def add_sprite(self, sprite: SpriteObject):
 		"""
@@ -53,3 +48,14 @@ class ObjectHandler:
 		:param entity: The entity to add.
 		"""
 		self.entities.append(entity)
+
+
+	def create_enemy(self):
+		"""
+		Adds an enemy to the map.
+		"""
+		self.add_entity(
+			Entity(self.game, pos=(uniform(1, self.game.map.map_size[0] - 1), uniform(1, self.game.map.map_size[1] - 1))))
+		while self.entities[-1].check_wall(self.entities[-1].x, self.entities[-1].y) is False:
+			self.entities[-1].x = uniform(1, self.game.map.map_size[0] - 1)
+			self.entities[-1].y = uniform(1, self.game.map.map_size[0] - 1)

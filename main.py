@@ -127,10 +127,8 @@ class Game:
 
 		# Infinitely spawns enemies cuz why not
 		if randint(0, 30) == 0:
-			# print("Spawned enemy")
-			# self.objects_handler.add_entity(
-			# 	Entity(game, pos=(uniform(1, self.map.map_size[0]), uniform(1, self.map.map_size[1])))
-			# )
+			if randint(0, 20) == 0:
+				self.objects_handler.create_enemy()
 			try:
 				chosen_enemy = choice([enemy for enemy in self.objects_handler.entities if enemy.alive])
 				self.objects_handler.add_sprite(
