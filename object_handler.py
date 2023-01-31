@@ -1,6 +1,7 @@
 import pygame
 from random import uniform
 
+from utils import distance
 from sprite_object import SpriteObject, AnimatedSprite
 from fireball import Fireball
 from entity import Entity
@@ -56,6 +57,10 @@ class ObjectHandler:
 		"""
 		self.add_entity(
 			Entity(self.game, pos=(uniform(1, self.game.map.map_size[0] - 1), uniform(1, self.game.map.map_size[1] - 1))))
-		while self.entities[-1].check_wall(self.entities[-1].x, self.entities[-1].y) is False:
+		while (
+			self.entities[-1].check_wall(self.entities[-1].x, self.entities[-1].y) is False
+		) or (
+			distance(self.game.player.x, self.entities[-1].x, self.game.player.y, self.entities[-1].y) <= 3
+		):
 			self.entities[-1].x = uniform(1, self.game.map.map_size[0] - 1)
 			self.entities[-1].y = uniform(1, self.game.map.map_size[0] - 1)
