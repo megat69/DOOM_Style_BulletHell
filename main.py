@@ -134,6 +134,9 @@ class Game:
 			"""self.screen.blit(self.raycasting._masking_surface, (0, 0), None, pygame.BLEND_RGBA_MULT)
 			self.raycasting._masking_surface.fill('black')"""
 
+		else:
+			self.player.rel = 0
+
 		# Erases the pygame display
 		pygame.display.flip()
 
