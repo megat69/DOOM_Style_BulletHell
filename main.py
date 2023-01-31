@@ -13,6 +13,7 @@ from weapon import Shotgun, Pistol, Fist
 from sounds import SoundHandler
 from UI import UI
 from entity import Entity
+from sprite_object import Fireball
 
 # TODO : Parallelise raycast ?
 # TODO : Enemies
@@ -127,9 +128,14 @@ class Game:
 
 		# Infinitely spawns enemies cuz why not
 		if randint(0, 170) == 0:
-			print("Spawned enemy")
-			self.objects_handler.add_entity(
-				Entity(game, pos=(uniform(1, self.map.map_size[0]), uniform(1, self.map.map_size[1])))
+			# print("Spawned enemy")
+			# self.objects_handler.add_entity(
+			# 	Entity(game, pos=(uniform(1, self.map.map_size[0]), uniform(1, self.map.map_size[1])))
+			# )
+			self.objects_handler.add_sprite(
+				Fireball(
+					self, pos=(uniform(1, self.map.map_size[0]), uniform(1, self.map.map_size[1]))
+				)
 			)
 
 		"""self.screen.blit(self.raycasting._masking_surface, (0, 0), None, pygame.BLEND_RGBA_MULT)
@@ -180,9 +186,11 @@ class Game:
 			view_bobbing = math.sin(pygame.time.get_ticks() / 300) * 5 * SETTINGS.graphics.view_bobbing_strength * (
 					1 + self.player.is_moving
 			) + (2 * self.weapon.reloading)
+			if self.player.health < 1:
+				view_bobbing -= 35
 
 			# We blit the rendering surface onto the screen
-			self.screen.blit(self.rendering_surface, (0, view_bobbing * SETTINGS.graphics.view_bobbing))
+			self.screen.blit(self.rendering_surface, (0, view_bobbing * (SETTINGS.graphics.view_bobbing or self.player.health < 1)))
 
 			# Draws the weapon
 			self.weapon.draw()

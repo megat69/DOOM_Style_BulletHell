@@ -34,6 +34,7 @@ class Player:
 		"""
 		Makes the player move
 		"""
+		if self.health < 1: return
 		# Determines the vector the player should follow to move forward
 		sin_a = math.sin(self.angle)
 		cos_a = math.cos(self.angle)
@@ -73,6 +74,7 @@ class Player:
 		self._rotate_player_from_keys(keys)
 
 	def movement_2D(self):
+		if self.health < 1: return
 		# The player's direction vector
 		direction = Vector2(0)
 
@@ -177,6 +179,18 @@ class Player:
 			self.game.weapon.sound.play()
 			# Removes ammo from the gun
 			self.game.weapon.ammo -= 1
+
+
+	def check_health(self):
+		"""
+		Checks the player health.
+		"""
+		if self.health < 1:
+			self.game.UI.create_UI_element(
+				"dead", "DEAD", "Impact", 128, lambda x, y: None,
+				(SETTINGS.graphics.resolution[0] // 2 - 75, SETTINGS.graphics.resolution[1] // 2 - 175),
+				(255, 255, 255)
+			)
 
 
 	def update(self):

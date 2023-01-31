@@ -5,6 +5,7 @@ import time
 
 from settings import SETTINGS
 from sprite_object import AnimatedSprite, Ammo
+from utils import distance
 
 
 class Entity(AnimatedSprite):
@@ -157,7 +158,7 @@ class Entity(AnimatedSprite):
 				# We decrease the entity's health by the weapon damage
 				self.health -= self.game.weapon.get_damage(
 					# We calculate the distance between the entity and the player
-					math.sqrt(((self.x - self.game.player.x) ** 2) + ((self.y - self.game.player.y) ** 2))
+					distance(self.x, self.game.player.x, self.y, self.game.player.y)
 				)
 				self.check_health()
 
