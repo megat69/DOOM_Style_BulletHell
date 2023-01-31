@@ -65,9 +65,9 @@ class Entity(AnimatedSprite):
 		self.check_animation_time()
 		self.run_logic()
 		super().update()
-		if distance(self.x, self.player.x, self.y, self.player.y) < self.shooting_accurate_distance \
-				and self.game.is_3D is False:
-			self.draw_ray_cast(True)
+		# if distance(self.x, self.player.x, self.y, self.player.y) < self.shooting_accurate_distance \
+		# 		and self.game.is_3D is False:
+		# 	self.draw_ray_cast(True)
 
 	def check_wall(self, x:int, y:int) -> bool:
 		"""
@@ -115,6 +115,24 @@ class Entity(AnimatedSprite):
 			# Checks if the entity was hit
 			self.check_hit_by_player()
 
+			# Random chance we spawn a fireball
+			if self.player_close_by <= self.time_to_fire and randint(
+					0, len(self.game.objects_handler.entities) * 8) == 0:
+				self.game.objects_handler.sprites_list.append(
+					Fireball(
+						self.game,
+						pos=(self.x, self.y),
+						direction=pygame.math.Vector2(
+							self.player.x - self.x,
+							self.player.y - self.y
+						).normalize() / 300 + pygame.math.Vector2(
+							uniform(-self.inaccuracy, self.inaccuracy),
+							uniform(-self.inaccuracy, self.inaccuracy)
+						),
+						noclip=randint(0, 100) < 5
+					)
+				)
+
 			# If the entity was hit by a shot, plays the pain animation
 			if self.in_pain:
 				self.animate_pain()
@@ -144,23 +162,6 @@ class Entity(AnimatedSprite):
 						)
 					)
 					self.player_close_by = 0
-
-				# Random chance we spawn a fireball
-				elif randint(0, len(self.game.objects_handler.entities) * 8) == 0:
-					self.game.objects_handler.sprites_list.append(
-						Fireball(
-							self.game,
-							pos=(self.x, self.y),
-							direction=pygame.math.Vector2(
-								self.player.x - self.x,
-								self.player.y - self.y
-							).normalize() / 300 + pygame.math.Vector2(
-								uniform(-self.inaccuracy, self.inaccuracy),
-								uniform(-self.inaccuracy, self.inaccuracy)
-							),
-							noclip=randint(0, 100) < 5
-						)
-					)
 
 			# Otherwise, just idles there
 			else:

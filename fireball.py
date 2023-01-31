@@ -1,4 +1,4 @@
-from sprite_object import SpriteObject
+from sprite_object import AnimatedSprite
 from utils import distance
 from settings import SETTINGS
 
@@ -8,11 +8,11 @@ from random import uniform, randint
 import math
 
 
-class Fireball(SpriteObject):
+class Fireball(AnimatedSprite):
 	def __init__(
 			self,
 			game,
-			path: str = 'assets/sprites/fireball.png',
+			path: str = 'assets/animated_sprites/fireball/0.png',
 			pos: tuple = (10.5, 4.5),
 			scale: float = 0.25,
 			shift: int = 0.5,
@@ -31,12 +31,12 @@ class Fireball(SpriteObject):
 		# Remembers the direction of the projectile
 		self.direction = direction
 		if self.direction is None:
-			self.direction = Vector2(uniform(-1, 1), uniform(-1, 1)) / randint(200, 400)
+			self.direction = Vector2(uniform(-1, 1), uniform(-1, 1)) / randint(500, 700)
 
 		# Remembers whether it clips through walls.
 		self.noclip = noclip
 		if self.noclip:
-			self.image = pygame.image.load('assets/sprites/fireball_blue.png').convert_alpha()
+			self.image = pygame.image.load('assets/animated_sprites/fireball_blue/0.png').convert_alpha()
 
 
 	def check_wall(self, x:int, y:int) -> bool:
