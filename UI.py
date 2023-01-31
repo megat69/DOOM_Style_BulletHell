@@ -13,7 +13,8 @@ class UI:
 
 
 	def create_UI_element(self, name: str, text: str, font_name: str, font_size: int, update: Callable,
-	                      position: Tuple[int, int], color: Tuple[int, int, int] = (0, 0, 0)):
+	                      position: Tuple[int, int], color: Tuple[int, int, int] = (0, 0, 0),
+	                      centered: bool = False):
 		"""
 		Creates a new UI element.
 		"""
@@ -22,7 +23,8 @@ class UI:
 			"font": pygame.font.SysFont(font_name, font_size),
 			"update": update,
 			"position": position,
-			"color": color
+			"color": color,
+			"centered": centered
 		}
 
 	def update(self):
@@ -36,4 +38,11 @@ class UI:
 	def draw(self):
 		for element in self.UI_elements.values():
 			text_surface = element["font"].render(element["text"], False, element["color"])
-			self.game.screen.blit(text_surface, element["position"])
+			self.game.screen.blit(text_surface, (
+				element["position"][0] - (
+					text_surface.get_width() // 2 * element["centered"]
+				),
+				element["position"][1] - (
+					text_surface.get_height() // 2 * element["centered"]
+				)
+			))

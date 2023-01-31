@@ -188,8 +188,8 @@ class Player:
 		if self.health < 1:
 			self.game.UI.create_UI_element(
 				"dead", "DEAD", "Impact", 128, lambda x, y: None,
-				(SETTINGS.graphics.resolution[0] // 2 - 75, SETTINGS.graphics.resolution[1] // 2 - 175),
-				(255, 255, 255)
+				(SETTINGS.graphics.resolution[0] // 2, SETTINGS.graphics.resolution[1] // 2 - 50),
+				(255, 255, 255), True
 			)
 
 
