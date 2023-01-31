@@ -25,6 +25,9 @@ class ObjectHandler:
 		for _ in range(10):
 			from random import uniform
 			self.add_entity(Entity(game, pos=(uniform(1, self.game.map.map_size[0] - 1), uniform(1, self.game.map.map_size[1] - 1))))
+			while self.entities[-1].check_wall(self.entities[-1].x, self.entities[-1].y) is False:
+				self.entities[-1].x = uniform(1, self.game.map.map_size[0] - 1)
+				self.entities[-1].y = uniform(1, self.game.map.map_size[0] - 1)
 
 
 	def update(self):

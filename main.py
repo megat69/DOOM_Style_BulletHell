@@ -137,7 +137,8 @@ class Game:
 				chosen_enemy = choice([enemy for enemy in self.objects_handler.entities if enemy.alive])
 				self.objects_handler.add_sprite(
 					Fireball(
-						self, pos=(chosen_enemy.x, chosen_enemy.y)
+						self, pos=(chosen_enemy.x, chosen_enemy.y),
+						noclip=randint(0, 100) < 5
 					)
 				)
 			except IndexError: pass
