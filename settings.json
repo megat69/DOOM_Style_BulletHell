@@ -31,6 +31,7 @@
 		"right": "d",
 		"perspective_change": "space",
 		"fire": "e",
+		"melee": "f",
 		"number_keys": [49, 50, 51, 52, 53, 54, 55, 56, 57],
 		"sensitivity": 0.000125,
 		"mouse_max_rel": 40,
