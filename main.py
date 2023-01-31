@@ -17,8 +17,6 @@ from fireball import Fireball
 
 
 # TODO : Parallelise raycast ?
-# TODO : Enemies
-# TODO : Fireballs
 # TODO : First map
 class Game:
 	"""
