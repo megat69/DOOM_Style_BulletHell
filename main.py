@@ -189,6 +189,10 @@ class Game:
 			# Draws the weapon
 			self.weapon.draw()
 
+			# Methods to draw the depth texture and AO
+			# self.screen.blit(self.object_renderer.depth_texture.convert(), (0, 0))
+			self.screen.blit(self.object_renderer.ambient_occlusion_texture.convert(), (0, 0))
+
 		# Draws the UI
 		self.UI.draw()
 
