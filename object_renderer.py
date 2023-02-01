@@ -19,6 +19,12 @@ class ObjectRenderer:
 		self.sky_texture = self.get_texture('assets/textures/sky.png', IMAGE_RESOLUTION)
 		self.sky_offset = 0
 
+		# Creates a depth texture, storing the depth of everything on the screen in one texture
+		self.depth_texture = pygame.Surface(SETTINGS.graphics.resolution).convert()
+
+		# Creates a texture for the ambient occlusion
+		self.ambient_occlusion_texture = pygame.Surface(SETTINGS.graphics.resolution).convert()
+
 
 	def draw(self):
 		"""
@@ -61,9 +67,32 @@ class ObjectRenderer:
 		# Gets the list of objects to render, and sorts them by the first away to the closest
 		objects_list = sorted(self.game.raycasting.objects_to_render, key=lambda t: t[0], reverse=True)
 
+		# Clears the depth texture
+		self.depth_texture.fill((0, 0, 0))
+
+		# Normalize function
+		normalize_depth = lambda x: (1 - (x / SETTINGS.graphics.max_depth)) * 255
+
+
 		# Fetches all objects in the raycast results and renders them
 		for depth, image, pos in objects_list:
+			# Draws the wall fragment to the wall
 			self.screen.blit(image, pos)
+
+			# Drawing to the depth texture
+			normalized_depth = normalize_depth(depth)
+			try:
+				pygame.draw.rect(
+					self.depth_texture,
+					(normalized_depth, normalized_depth, normalized_depth),
+					pygame.Rect(
+						pos[0], pos[1],
+						image.get_width(), image.get_height()
+					)
+				)
+			except ValueError: pass
+
+
 
 
 	@staticmethod
