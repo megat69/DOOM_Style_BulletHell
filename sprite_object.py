@@ -137,6 +137,10 @@ class AnimatedSprite(SpriteObject):
 		hidden: bool = False,
 		darken: bool = False
 	):
+		"""
+		:param hidden: Whether to show the sprite in 2D.
+		:param darken: Whether to use the depth darkening process on this sprite in 3D.
+		"""
 		# Calls the superclass
 		super().__init__(game, path, pos, scale, shift, hidden, darken)
 		# Saves the animation time

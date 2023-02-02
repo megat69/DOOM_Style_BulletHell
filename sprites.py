@@ -66,13 +66,6 @@ class ShotgunPickup(Pickup):
 				wpn.animation_time = 70
 				wpn.game.player.can_move = True
 
-				# Also adds enemies to the map
-				for i in (1.5, len(wpn.game.map.map) - 1.5):
-					for j in (1.5, len(wpn.game.map.map[0]) - 1.5):
-						wpn.game.objects_handler.create_enemy(
-							pos = (i, j)
-						)
-
 				# Removes the post reload function
 				wpn.post_reload_function = lambda x: None
 			self.game.weapon.post_reload_function = post_rl_func
@@ -82,12 +75,24 @@ class ShotgunPickup(Pickup):
 			self.game.weapon.animation_time = 130
 			self.game.player.rel = 0
 			self.game.player.can_move = False
+			# Also adds enemies to the map
+			for i in (1.5, len(self.game.map.map) - 1.5):
+				for j in (1.5, len(self.game.map.map[0]) - 1.5):
+					self.game.objects_handler.create_enemy(
+						pos=(i, j)
+					)
 			self.game.weapon.reloading = True
 			self.game.weapon.animate_shot()
+
+
+class Portal(AnimatedSprite):
+	def __init__(self, game, pos):
+		super().__init__(game, path="assets/animated_sprites/portal/011.png", pos=pos)
 
 
 ALL_SPRITES = {
 	"candlebra": Candlebra,
 	"green_flame": GreenFlame,
-	"shotgun_pickup": ShotgunPickup
+	"shotgun_pickup": ShotgunPickup,
+	"portal": Portal
 }

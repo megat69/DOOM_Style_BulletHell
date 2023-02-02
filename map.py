@@ -1,6 +1,7 @@
 import pygame
 from random import randint
 import json
+from importlib import import_module
 
 from settings import SETTINGS
 from sprites import ALL_SPRITES
@@ -31,6 +32,9 @@ class Map:
 		with open("maps/map0.json", "r") as map_data_file:
 			map_data = json.load(map_data_file)
 
+		# Loads the map code
+		self.map_code = import_module("maps.map0")
+
 		self.map = map_data["map"]
 		self.tile_size = map_data["tile_size"]
 		self.map_size = tuple(map(lambda x: x // self.tile_size, SETTINGS.graphics.resolution))
@@ -40,18 +44,22 @@ class Map:
 		self.base_enemy_spawn = map_data["base_enemy_spawn"]  # Base amount of enemies on the map
 		self.max_enemies = map_data["max_enemies"]  # Max amount of enemies on the map
 		self.map_data = map_data
+		self.sprites_awaiting_appearance = []
 
 	def load_sprites(self):
 		"""
 		Loads the sprites.
 		"""
 		for sprite in self.map_data["sprites"]:
-			self.game.objects_handler.add_sprite(
-				ALL_SPRITES[sprite["name"]](
-					self.game,
-					pos=sprite["pos"]
+			if "appearance" not in sprite.keys():
+				self.game.objects_handler.add_sprite(
+					ALL_SPRITES[sprite["name"]](
+						self.game,
+						pos=sprite["pos"]
+					)
 				)
-			)
+			else:
+				self.sprites_awaiting_appearance.append(sprite)
 
 	def get_map(self):
 		"""
@@ -73,3 +81,19 @@ class Map:
 					pygame.transform.scale(self.game.object_renderer.wall_textures[value], (self.tile_size, self.tile_size)),
 					(pos[0] * self.tile_size, pos[1] * self.tile_size)
 				)
+
+
+	def update(self):
+		"""
+		Updates every frame.
+		"""
+		# Runs the function to check if each sprite can appear
+		for sprite in self.sprites_awaiting_appearance:
+			if self.map_code.FUNCTIONS[sprite["appearance"]](self.game):
+				self.game.objects_handler.add_sprite(
+					ALL_SPRITES[sprite["name"]](
+						self.game,
+						pos=sprite["pos"]
+					)
+				)
+				self.sprites_awaiting_appearance.remove(sprite)

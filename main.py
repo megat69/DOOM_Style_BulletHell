@@ -117,6 +117,9 @@ class Game:
 		Runs every frame, contains the game's main logic.
 		"""
 		if self.player.health > 0:
+			# Updates the map
+			self.map.update()
+
 			# Updates the player position
 			self.player.update()
 
