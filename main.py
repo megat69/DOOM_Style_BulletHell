@@ -3,6 +3,8 @@ import sys
 import math
 from random import randint, uniform, choice
 import time
+import os
+import json
 
 from settings import SETTINGS
 from map import Map
@@ -44,6 +46,12 @@ class Game:
 		"""
 		Creates a new game.
 		"""
+		self.await_restart = False
+
+		# Loads the save data
+		with open(os.path.join(SETTINGS.misc.save_location, "save_data.json")) as save_data_file:
+			self.save_data = json.load(save_data_file)
+
 		# Remembers the start time
 		self.start_time = time.time()
 
@@ -122,6 +130,10 @@ class Game:
 		"""
 		Runs every frame, contains the game's main logic.
 		"""
+		# If we need to restart
+		if self.await_restart:
+			self.new_game()
+
 		if self.player.health > 0:
 			# Updates the map
 			self.map.update()

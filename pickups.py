@@ -1,7 +1,7 @@
 import time
 
 from settings import SETTINGS
-from sprite_object import SpriteObject
+from sprite_object import SpriteObject, AnimatedSprite
 
 
 class Pickup(SpriteObject):
@@ -37,6 +37,36 @@ class Pickup(SpriteObject):
 		"""
 		pass
 
+
+class PickupAnimated(AnimatedSprite):
+	def __init__(
+			self,
+			game,
+			path: str = 'assets/textures/pickups/pistol.png',
+			pos: tuple = (10.5, 4.5),
+			scale: float = 0.1,
+			shift: int = 5,
+			pickup_distance: float = .25,
+			animation_time: int = 120
+	):
+		super().__init__(game, path, pos, scale, shift, animation_time)
+		self.picked_up = False
+		self.pickup_distance = pickup_distance
+		self._creation_time = time.time()
+
+
+	def update(self):
+		super().update()
+		if (round(self.player.x, 1) - self.pickup_distance < self.x < round(self.player.x, 1) + self.pickup_distance) and \
+				(round(self.player.y, 1) - self.pickup_distance < self.y < round(self.player.y, 1) + self.pickup_distance):
+			if self.picked_up is False:
+				self.pick_up()
+				try:
+					self.game.objects_handler.sprites_list.remove(self)
+				except ValueError: pass
+
+	def pick_up(self):
+		pass
 
 class Ammo(Pickup):
 	BASE_GAIN = {

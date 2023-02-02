@@ -3,10 +3,13 @@ Contains the created sprites.
 """
 # Lib imports
 import pygame
+import os
+import json
 
 # Relative imports
 from sprite_object import SpriteObject, AnimatedSprite
-from pickups import Pickup
+from pickups import Pickup, PickupAnimated
+from settings import SETTINGS
 
 # Sprite-specific imports
 from collections import deque
@@ -85,9 +88,22 @@ class ShotgunPickup(Pickup):
 			self.game.weapon.animate_shot()
 
 
-class Portal(AnimatedSprite):
+class Portal(PickupAnimated):
 	def __init__(self, game, pos):
-		super().__init__(game, path="assets/animated_sprites/portal/011.png", pos=pos)
+		super().__init__(
+			game,
+			path = "assets/animated_sprites/portal/011.png",
+			pos = pos,
+			scale = 1.0,
+			shift = 0.12
+		)
+
+	def pick_up(self):
+		print("Teleporting to next level")
+		self.game.save_data["current_level"] += 1
+		with open(os.path.join(SETTINGS.misc.save_location, "save_data.json"), "w") as save_data_file:
+			json.dump(self.game.save_data, save_data_file, indent=2)
+		self.game.await_restart = True
 
 
 ALL_SPRITES = {

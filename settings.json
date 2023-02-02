@@ -43,5 +43,8 @@
 		"weapon": 1.0,
 		"entity": 1.0,
 		"sfx": 1.0
+	},
+	"misc": {
+		"save_location": "save"
 	}
 }

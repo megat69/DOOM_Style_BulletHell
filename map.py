@@ -1,5 +1,6 @@
 import pygame
 import time
+import os
 import json
 from importlib import import_module
 
@@ -31,11 +32,19 @@ class Map:
 		self.game = game
 
 		# Loads the map from json
-		with open("maps/map0.json", "r") as map_data_file:
-			map_data = json.load(map_data_file)
+		try:
+			with open(f"maps/map{game.save_data['current_level']}.json", "r") as map_data_file:
+				map_data = json.load(map_data_file)
+		except FileNotFoundError:  # If the level doesn't exist
+			with open(os.path.join(SETTINGS.misc.save_location, "save_data.json"), "w") as save_data_file:
+				print("Level was reset !")
+				self.game.save_data['current_level'] = 0
+				json.dump(self.game.save_data, save_data_file, indent=2)
+			with open(f"maps/map{game.save_data['current_level']}.json", "r") as map_data_file:
+				map_data = json.load(map_data_file)
 
 		# Loads the map code
-		self.map_code = import_module("maps.map0")
+		self.map_code = import_module(f"maps.map{game.save_data['current_level']}")
 
 		self.map = map_data["map"]
 		self.tile_size = map_data["tile_size"]
