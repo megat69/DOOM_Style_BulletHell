@@ -1,6 +1,7 @@
 import os
 import pygame
 from collections import deque
+from typing import Callable
 
 from settings import SETTINGS
 from sprite_object import AnimatedSprite
@@ -19,7 +20,8 @@ class Weapon(AnimatedSprite):
 			name: str = "shotgun",
 			starting_ammo: int = 18,
 			max_ammo: int = 18,
-			speed_multiplier: float = 0.75
+			speed_multiplier: float = 0.75,
+			post_reload_function: Callable = lambda e: None
 	):
 		super().__init__(game=game, path=path, scale=scale, animation_time=animation_time)
 		# Loads the images
@@ -54,6 +56,8 @@ class Weapon(AnimatedSprite):
 		self.name = name
 		# Keeps the speed multiplier
 		self.speed_multiplier = speed_multiplier
+		# Function to be triggered after reload
+		self.post_reload_function = post_reload_function
 
 
 	def get_damage(self, distance: float) -> float:
@@ -86,6 +90,7 @@ class Weapon(AnimatedSprite):
 				if self.frame_counter == self.num_frames:
 					self.reloading = False
 					self.frame_counter = 0
+					self.post_reload_function(self)
 
 
 	def draw(self):
@@ -119,7 +124,7 @@ class Shotgun(Weapon):
 		super().__init__(
 			game, 'assets/animated_sprites/shotgun/0.png', 4, 70,
 			"shotgun",
-			starting_ammo=18,
+			starting_ammo=game.map.map_data["base_ammo"]["shotgun"],
 			max_ammo=18,
 			speed_multiplier=0.95
 		)
@@ -136,7 +141,7 @@ class Pistol(Weapon):
 		super().__init__(
 			game, 'assets/animated_sprites/pistol/0.png', 3, 40,
 			name="pistol",
-			starting_ammo=24,
+			starting_ammo=game.map.map_data["base_ammo"]["pistol"],
 			max_ammo=24,
 			speed_multiplier=1.02
 		)
@@ -187,3 +192,10 @@ class Fist(Weapon):
 					self.frame_counter = 0
 					# Sets the weapon back to the current weapon
 					self.game.weapon = self.game.weapons[self.game.current_weapon]
+
+
+ALL_WEAPONS = {
+	"shotgun": Shotgun,
+	"pistol": Pistol,
+	"fist": Fist
+}

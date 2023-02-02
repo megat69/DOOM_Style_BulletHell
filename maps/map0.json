@@ -1,0 +1,48 @@
+{
+	"map_title": "The start of something...",
+	"map": [
+		[2, 2, 2, 1, 2, 2, 2, 1, 2],
+		[2, 0, 0, 0, 0, 0, 0, 0, 2],
+		[2, 0, 0, 0, 0, 0, 0, 0, 2],
+		[1, 0, 0, 2, 0, 1, 0, 0, 2],
+		[2, 0, 0, 0, 0, 0, 0, 0, 2],
+		[2, 0, 0, 1, 0, 2, 0, 0, 1],
+		[2, 0, 0, 0, 0, 0, 0, 0, 2],
+		[2, 0, 0, 0, 0, 0, 0, 0, 2],
+		[2, 2, 1, 2, 2, 2, 1, 2, 2]
+	],
+	"tile_size": 75,
+	"base_enemy_spawn": 0,
+	"max_enemies": 0,
+	"base_ammo": {
+		"shotgun": 18,
+		"pistol": 24
+	},
+	"enemies": {
+		"min_fire_delay": 2
+	},
+	"available_weapons": ["fist"],
+	"fixed_enemy_spawns": [],
+	"sprites": [
+		{
+			"name": "candlebra",
+			"pos": [3.5, 4.5]
+		},
+		{
+			"name": "candlebra",
+			"pos": [5.5, 4.5]
+		},
+		{
+			"name": "green_flame",
+			"pos": [4.5, 3.5]
+		},
+		{
+			"name": "green_flame",
+			"pos": [4.5, 5.5]
+		},
+		{
+			"name": "shotgun_pickup",
+			"pos": [4.5, 4.5]
+		}
+	]
+}

@@ -22,6 +22,7 @@ class Player:
 
 		# Keeping in mind if the player is moving
 		self.is_moving = False
+		self.can_move = True  # Whether the player is allowed to move
 
 		# Keeps track of the player's health by setting it to the base health (setting)
 		self.health = SETTINGS.player.base_health
@@ -34,7 +35,7 @@ class Player:
 		"""
 		Makes the player move
 		"""
-		if self.health < 1: return
+		if self.health < 1 or not self.can_move: return
 		# Determines the vector the player should follow to move forward
 		sin_a = math.sin(self.angle)
 		cos_a = math.cos(self.angle)
@@ -74,7 +75,7 @@ class Player:
 		self._rotate_player_from_keys(keys)
 
 	def movement_2D(self):
-		if self.health < 1: return
+		if self.health < 1 or not self.can_move: return
 		# The player's direction vector
 		direction = Vector2(0)
 
@@ -139,17 +140,17 @@ class Player:
 			pygame.draw.line(
 				self.game.screen,
 				'yellow',
-				(self.x * SETTINGS.graphics.tile_size, self.y * SETTINGS.graphics.tile_size),
+				(self.x * self.game.map.tile_size, self.y * self.game.map.tile_size),
 				(
-					self.x * SETTINGS.graphics.tile_size + 50 * math.cos(self.angle),
-					self.y * SETTINGS.graphics.tile_size + 50 * math.sin(self.angle)
+					self.x * self.game.map.tile_size + 50 * math.cos(self.angle),
+					self.y * self.game.map.tile_size + 50 * math.sin(self.angle)
 				),
 				2
 			)
 			pygame.draw.circle(
 				self.game.screen,
 				'green',
-				(self.x * SETTINGS.graphics.tile_size, self.y * SETTINGS.graphics.tile_size),
+				(self.x * self.game.map.tile_size, self.y * self.game.map.tile_size),
 				15
 			)
 
@@ -203,7 +204,9 @@ class Player:
 			self.movement_3D()
 		else:
 			self.movement_2D()
-		self.mouse_control()
+
+		if self.can_move:
+			self.mouse_control()
 
 
 	@property

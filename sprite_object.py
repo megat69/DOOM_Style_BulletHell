@@ -107,8 +107,8 @@ class SpriteObject:
 				SETTINGS.graphics.sprite_size_2D * self.SPRITE_SCALE
 			)),
 			(
-				int(self.x * SETTINGS.graphics.tile_size) - SETTINGS.graphics.sprite_size_2D * self.SPRITE_SCALE // 2,
-				int(self.y * SETTINGS.graphics.tile_size) - SETTINGS.graphics.sprite_size_2D * self.SPRITE_SCALE // 2
+				int(self.x * self.game.map.tile_size) - SETTINGS.graphics.sprite_size_2D * self.SPRITE_SCALE // 2,
+				int(self.y * self.game.map.tile_size) - SETTINGS.graphics.sprite_size_2D * self.SPRITE_SCALE // 2
 			)
 		)
 

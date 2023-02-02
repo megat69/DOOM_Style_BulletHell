@@ -9,7 +9,7 @@ from player import Player
 from raycasting import RayCasting
 from object_renderer import ObjectRenderer
 from object_handler import ObjectHandler
-from weapon import Shotgun, Pistol, Fist
+from weapon import Shotgun, Pistol, Fist, ALL_WEAPONS
 from sounds import SoundHandler
 from UI import UI
 from entity import Entity
@@ -61,8 +61,14 @@ class Game:
 		# Loads the objects handler
 		self.objects_handler = ObjectHandler(self)
 
+		# Loads the sprites on the map
+		self.map.load_sprites()
+
 		# Loads the weapon
-		self.weapons = [Shotgun(self), Pistol(self), Fist(self)]
+		self.weapons = [
+			ALL_WEAPONS[weapon](self)
+			for weapon in self.map.map_data["available_weapons"]
+		]
 		self.current_weapon = 0
 		self.weapon = self.weapons[self.current_weapon]
 
@@ -128,7 +134,7 @@ class Game:
 			self.UI.update()
 
 			# Infinitely spawns enemies and fireballs cuz why not
-			if randint(0, 100) == 0 and len(self.objects_handler.entities) < 10:
+			if randint(0, 100) == 0 and len(self.objects_handler.entities) < self.map.max_enemies:
 				self.objects_handler.create_enemy(fleer=randint(1, 4) == 1)
 
 			"""self.screen.blit(self.raycasting._masking_surface, (0, 0), None, pygame.BLEND_RGBA_MULT)

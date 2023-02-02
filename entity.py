@@ -59,6 +59,7 @@ class Entity(AnimatedSprite):
 		self.shooting_accurate_distance = 3
 		self.no_ai = no_ai
 		self.fleer = fleer
+		self._last_fireball_time = time.time()
 
 		# Loads the pain sound
 		self.game.sound.load_sound("pain", self.game.sound.sounds_path + 'npc_pain.wav', "entity")
@@ -79,8 +80,8 @@ class Entity(AnimatedSprite):
 				self.game.screen,
 				(255, 0, 0),
 				(
-					self.x * SETTINGS.graphics.tile_size,
-					self.y * SETTINGS.graphics.tile_size
+					self.x * self.game.map.tile_size,
+					self.y * self.game.map.tile_size
 				),
 				10
 			)
@@ -137,7 +138,9 @@ class Entity(AnimatedSprite):
 
 			# Random chance we spawn a fireball
 			if self.player_far_enough <= self.time_to_fire and randint(
-					0, len(self.game.objects_handler.entities) * 9) == 0:
+					0, len(self.game.objects_handler.entities) * 6) == 0 and (
+				time.time() - self._last_fireball_time >= self.game.map.map_data["enemies"]["min_fire_delay"]
+			):
 				self.game.objects_handler.sprites_list.append(
 					Fireball(
 						self.game,
@@ -152,6 +155,7 @@ class Entity(AnimatedSprite):
 						noclip=randint(0, 100) < 5
 					)
 				)
+				self._last_fireball_time = time.time()
 
 			# If the entity was hit by a shot, plays the pain animation
 			if self.in_pain:
@@ -270,18 +274,19 @@ class Entity(AnimatedSprite):
 						)
 					)
 				if randint(0, 2) != 2:
-					chosen_weapon = choice(self.game.weapons)
-					while chosen_weapon is self.game.get_weapon_by_name("fist"):
+					if not all(weapon.name == "fist" for weapon in self.game.weapons):
 						chosen_weapon = choice(self.game.weapons)
-					self.game.objects_handler.add_sprite(
-						Ammo(
-							self.game, f'assets/textures/pickups/{chosen_weapon.name}.png',
-							(self.x, self.y), chosen_weapon.name, randint(
-								Ammo.BASE_GAIN[chosen_weapon.name][0],
-								Ammo.BASE_GAIN[chosen_weapon.name][1]
+						while chosen_weapon is self.game.get_weapon_by_name("fist"):
+							chosen_weapon = choice(self.game.weapons)
+						self.game.objects_handler.add_sprite(
+							Ammo(
+								self.game, f'assets/textures/pickups/{chosen_weapon.name}.png',
+								(self.x, self.y), chosen_weapon.name, randint(
+									Ammo.BASE_GAIN[chosen_weapon.name][0],
+									Ammo.BASE_GAIN[chosen_weapon.name][1]
+								)
 							)
 						)
-					)
 
 	@property
 	def map_pos(self):
@@ -386,18 +391,18 @@ class Entity(AnimatedSprite):
 		if not normalized_ray_only:
 			pygame.draw.circle(
 				self.game.screen, 'red', (
-					SETTINGS.graphics.tile_size * self.x,
-					SETTINGS.graphics.tile_size * self.y
+					self.game.map.tile_size * self.x,
+					self.game.map.tile_size * self.y
 				), 15
 			)
 
 		if self.ray_cast_player_to_entity():
 			pygame.draw.line(
 				self.game.screen, 'red', (
-					SETTINGS.graphics.tile_size * self.player.x,
-					SETTINGS.graphics.tile_size * self.player.y
+					self.game.map.tile_size * self.player.x,
+					self.game.map.tile_size * self.player.y
 				), (
-					SETTINGS.graphics.tile_size * self.x,
-					SETTINGS.graphics.tile_size * self.y
+					self.game.map.tile_size * self.x,
+					self.game.map.tile_size * self.y
 				), 2
 			)

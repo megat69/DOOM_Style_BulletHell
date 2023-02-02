@@ -1,5 +1,6 @@
 import pygame
 from random import uniform, randint
+from typing import Tuple
 
 from utils import distance
 from sprite_object import SpriteObject, AnimatedSprite
@@ -21,10 +22,10 @@ class ObjectHandler:
 		self.animated_sprites_path = "assets/animated_sprites/"
 
 		# Sprite creation
-		self.add_sprite(SpriteObject(game))
-		self.add_sprite(AnimatedSprite(game))
-		self.add_sprite(Fireball(game, direction=pygame.math.Vector2(0, 0)))
-		for _ in range(10):
+		# self.add_sprite(SpriteObject(game))
+		# self.add_sprite(AnimatedSprite(game))
+		# self.add_sprite(Fireball(game, direction=pygame.math.Vector2(0, 0)))
+		for _ in range(self.game.map.base_enemy_spawn):
 			self.create_enemy(randint(1, 6) == 1, randint(1, 4) == 1)
 
 	def update(self):
@@ -51,7 +52,7 @@ class ObjectHandler:
 		self.entities.append(entity)
 
 
-	def create_enemy(self, no_ai: bool = False, fleer: bool = False):
+	def create_enemy(self, no_ai: bool = False, fleer: bool = False, pos: Tuple[int, int] = None):
 		"""
 		Adds an enemy to the map.
 		"""
@@ -61,7 +62,7 @@ class ObjectHandler:
 				pos = (
 					uniform(1, self.game.map.map_size[0] - 1),
 					uniform(1, self.game.map.map_size[1] - 1)
-				),
+				) if pos is None else pos,
 				no_ai = no_ai,
 				fleer = fleer
 			)
