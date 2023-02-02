@@ -71,11 +71,13 @@ class Entity(AnimatedSprite):
 			self.game.sound.loaded_sounds["enemy_spawn"].play()
 
 		# Adds a VFX object
-		self.game.objects_handler.add_sprite(
-			VFX(
-				self.game, pos=pos
+		try:
+			self.game.objects_handler.add_sprite(
+				VFX(
+					self.game, pos=pos
+				)
 			)
-		)
+		except AttributeError: pass  # The object handler didn't load in yet
 
 	def update(self):
 		"""

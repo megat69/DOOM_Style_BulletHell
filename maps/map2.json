@@ -1,0 +1,51 @@
+{
+	"map_title": "Kill them all.",
+	"map": [
+		[2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2],
+		[2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+		[2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+		[1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+		[2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+		[2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+		[2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+		[2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+		[2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2]
+	],
+	"tile_size": 64,
+	"player_start_pos": [1.5, 4.5],
+	"base_enemy_spawn": 0,
+	"max_enemies": 4,
+	"base_ammo": {
+		"shotgun": 18,
+		"pistol": 24
+	},
+	"enemies": {
+		"min_fire_delay": 1
+	},
+	"starting_perspective_is_2D": false,
+	"available_weapons": ["shotgun", "fist"],
+	"fixed_enemy_spawns": [
+		{
+			"pos": [10, 3]
+		},
+		{
+			"pos": [10, 7]
+		},
+		{
+			"pos": [7, 4]
+		},
+		{
+			"pos": [7, 6]
+		}
+	],
+	"sprites": [
+		{
+			"name": "portal",
+			"pos": [6.5, 4.5],
+			"data": {
+				"play_sound": false
+			},
+			"appearance": "portal_appear"
+		}
+	]
+}

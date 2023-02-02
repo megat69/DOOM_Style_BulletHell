@@ -48,7 +48,7 @@ class Map:
 
 		self.map = map_data["map"]
 		self.tile_size = map_data["tile_size"]
-		self.map_size = tuple(map(lambda x: x // self.tile_size, SETTINGS.graphics.resolution))
+		self.map_size = (len(self.map[0]) - 1, len(self.map) - 1)
 		self.world_map = {}
 		self.get_map()
 		self.map_title = map_data["map_title"]
@@ -100,7 +100,8 @@ class Map:
 		"""
 		Loads all the enemies.
 		"""
-		pass
+		for enemy in self.map_data["fixed_enemy_spawns"]:
+			self.game.objects_handler.create_enemy(**enemy)
 
 
 	def get_map(self):
