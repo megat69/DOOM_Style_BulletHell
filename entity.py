@@ -22,12 +22,14 @@ class Entity(AnimatedSprite):
 			shift: int = 0.38,
 			animation_time: int = 180,
 			time_to_fire: Union[Tuple[int, int], int] = (5000, 6000),
-			no_ai: bool = False
+			no_ai: bool = False,
+			fleer: bool = False
 	):
 		"""
 		:param time_to_fire: The time it takes for the entity to fire an aimed projectile at the player.
 		Can be either a tuple of two integers, and an int will be randomly chosen between them, a static integer value.
 		:param no_ai: Whether the entity should not possess an AI.
+		:param fleer: Whether the entity is a fleer ; if so, will run away from the player instead of coming to them.
 		"""
 		super().__init__(game, path, pos, scale, shift, animation_time, hidden=True, darken=True)
 		# Loads all images for each state
@@ -56,6 +58,7 @@ class Entity(AnimatedSprite):
 		self.inaccuracy = 0.005
 		self.shooting_accurate_distance = 3
 		self.no_ai = no_ai
+		self.fleer = fleer
 
 		# Loads the pain sound
 		self.game.sound.load_sound("pain", self.game.sound.sounds_path + 'npc_pain.wav', "entity")
@@ -112,6 +115,10 @@ class Entity(AnimatedSprite):
 				direction = pygame.Vector2(0, 0)
 			else:
 				direction = pygame.Vector2(math.cos(angle) * self.speed, math.sin(angle) * self.speed)
+
+
+		# Inverting the direction if the mob is a fleer
+		direction *= (-1) ** self.fleer
 
 		# If there is no wall collision and no other entity there already, moves in this direction
 		self.check_wall_collisions(direction)

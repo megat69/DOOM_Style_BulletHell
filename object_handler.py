@@ -1,5 +1,5 @@
 import pygame
-from random import uniform
+from random import uniform, randint
 
 from utils import distance
 from sprite_object import SpriteObject, AnimatedSprite
@@ -25,7 +25,7 @@ class ObjectHandler:
 		self.add_sprite(AnimatedSprite(game))
 		self.add_sprite(Fireball(game, direction=pygame.math.Vector2(0, 0)))
 		for _ in range(10):
-			self.create_enemy()
+			self.create_enemy(randint(1, 6) == 1, randint(1, 4) == 1)
 
 	def update(self):
 		"""
@@ -51,7 +51,7 @@ class ObjectHandler:
 		self.entities.append(entity)
 
 
-	def create_enemy(self, no_ai: bool = False):
+	def create_enemy(self, no_ai: bool = False, fleer: bool = False):
 		"""
 		Adds an enemy to the map.
 		"""
@@ -62,7 +62,8 @@ class ObjectHandler:
 					uniform(1, self.game.map.map_size[0] - 1),
 					uniform(1, self.game.map.map_size[1] - 1)
 				),
-				no_ai = no_ai
+				no_ai = no_ai,
+				fleer = fleer
 			)
 		)
 		while (
