@@ -21,11 +21,13 @@ class Entity(AnimatedSprite):
 			scale: float = 0.6,
 			shift: int = 0.38,
 			animation_time: int = 180,
-			time_to_fire: Union[Tuple[int, int], int] = (2400, 3000)
+			time_to_fire: Union[Tuple[int, int], int] = (5000, 6000),
+			no_ai: bool = False
 	):
 		"""
 		:param time_to_fire: The time it takes for the entity to fire an aimed projectile at the player.
 		Can be either a tuple of two integers, and an int will be randomly chosen between them, a static integer value.
+		:param no_ai: Whether the entity should not possess an AI.
 		"""
 		super().__init__(game, path, pos, scale, shift, animation_time, hidden=True, darken=True)
 		# Loads all images for each state
@@ -53,6 +55,7 @@ class Entity(AnimatedSprite):
 		) if isinstance(time_to_fire, tuple) else time_to_fire
 		self.inaccuracy = 0.005
 		self.shooting_accurate_distance = 3
+		self.no_ai = no_ai
 
 		# Loads the pain sound
 		self.game.sound.load_sound("pain", self.game.sound.sounds_path + 'npc_pain.wav', "entity")
@@ -68,6 +71,16 @@ class Entity(AnimatedSprite):
 		# if distance(self.x, self.player.x, self.y, self.player.y) < self.shooting_accurate_distance \
 		# 		and self.game.is_3D is False:
 		# 	self.draw_ray_cast(True)
+		if self.game.is_3D is False and self.alive:
+			pygame.draw.circle(
+				self.game.screen,
+				(255, 0, 0),
+				(
+					self.x * SETTINGS.graphics.tile_size,
+					self.y * SETTINGS.graphics.tile_size
+				),
+				10
+			)
 
 	def check_wall(self, x:int, y:int) -> bool:
 		"""
@@ -117,7 +130,7 @@ class Entity(AnimatedSprite):
 
 			# Random chance we spawn a fireball
 			if self.player_close_by <= self.time_to_fire and randint(
-					0, len(self.game.objects_handler.entities) * 8) == 0:
+					0, len(self.game.objects_handler.entities) * 9) == 0:
 				self.game.objects_handler.sprites_list.append(
 					Fireball(
 						self.game,
@@ -138,7 +151,7 @@ class Entity(AnimatedSprite):
 				self.animate_pain()
 
 			# If it can see the player, plays the walking animation and chases the player
-			elif self.can_see_player:
+			elif self.can_see_player and not self.no_ai:
 				self.animate(self.animations['walk'])
 				self.movement()
 
@@ -242,14 +255,14 @@ class Entity(AnimatedSprite):
 					)
 				)
 			else:
-				if randint(0, 3) == 0:
+				if randint(0, 1) == 0:
 					self.game.objects_handler.add_sprite(
 						Health(
 							self.game,
 							pos=(self.x, self.y)
 						)
 					)
-				else:
+				if randint(0, 2) != 2:
 					chosen_weapon = choice(self.game.weapons)
 					while chosen_weapon is self.game.get_weapon_by_name("fist"):
 						chosen_weapon = choice(self.game.weapons)

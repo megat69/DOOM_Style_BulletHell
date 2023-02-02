@@ -51,12 +51,20 @@ class ObjectHandler:
 		self.entities.append(entity)
 
 
-	def create_enemy(self):
+	def create_enemy(self, no_ai: bool = False):
 		"""
 		Adds an enemy to the map.
 		"""
 		self.add_entity(
-			Entity(self.game, pos=(uniform(1, self.game.map.map_size[0] - 1), uniform(1, self.game.map.map_size[1] - 1))))
+			Entity(
+				self.game,
+				pos = (
+					uniform(1, self.game.map.map_size[0] - 1),
+					uniform(1, self.game.map.map_size[1] - 1)
+				),
+				no_ai = no_ai
+			)
+		)
 		while (
 			self.entities[-1].check_wall(self.entities[-1].x, self.entities[-1].y) is False
 		) or (

@@ -128,7 +128,7 @@ class Game:
 			self.UI.update()
 
 			# Infinitely spawns enemies and fireballs cuz why not
-			if randint(0, 100) == 0 and len(self.objects_handler.entities) < 15:
+			if randint(0, 100) == 0 and len(self.objects_handler.entities) < 12:
 				self.objects_handler.create_enemy()
 
 			"""self.screen.blit(self.raycasting._masking_surface, (0, 0), None, pygame.BLEND_RGBA_MULT)
