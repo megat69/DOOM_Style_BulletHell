@@ -12,6 +12,7 @@
 		[2, 2, 1, 2, 2, 2, 1, 2, 2]
 	],
 	"tile_size": 75,
+	"player_start_pos": [1.5, 5],
 	"base_enemy_spawn": 0,
 	"max_enemies": 0,
 	"base_ammo": {

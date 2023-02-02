@@ -17,7 +17,6 @@
 		"show_FPS": true
 	},
 	"player": {
-		"pos": [1.5, 5],
 		"angle": 0,
 		"speed": 0.003,
 		"rotation_speed": 0.0018,

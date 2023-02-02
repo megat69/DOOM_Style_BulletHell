@@ -17,7 +17,7 @@ class Player:
 		self.game = game
 
 		# Keeping in mind the player coords
-		self.x, self.y = SETTINGS.player.pos
+		self.x, self.y = self.game.map.map_data["player_start_pos"]
 		self.angle = SETTINGS.player.angle
 
 		# Keeping in mind if the player is moving
