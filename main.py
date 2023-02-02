@@ -136,6 +136,7 @@ class Game:
 
 		else:
 			self.player.rel = 0
+			pygame.event.set_grab(False)
 
 		# Erases the pygame display
 		pygame.display.flip()
@@ -191,7 +192,7 @@ class Game:
 
 			# Methods to draw the depth texture and AO
 			# self.screen.blit(self.object_renderer.depth_texture.convert(), (0, 0))
-			self.screen.blit(self.object_renderer.ambient_occlusion_texture.convert(), (0, 0))
+			# self.screen.blit(self.object_renderer.ambient_occlusion_texture.convert(), (0, 0))
 
 		# Draws the UI
 		self.UI.draw()
