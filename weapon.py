@@ -1,7 +1,7 @@
 import os
 import pygame
 from collections import deque
-from typing import Callable
+from typing import Callable, Union
 
 from settings import SETTINGS
 from sprite_object import AnimatedSprite
@@ -21,7 +21,9 @@ class Weapon(AnimatedSprite):
 			starting_ammo: int = 18,
 			max_ammo: int = 18,
 			speed_multiplier: float = 0.75,
-			post_reload_function: Callable = lambda e: None
+			post_reload_function: Callable = lambda e: None,
+			reload_sound_name: Union[str | None] = "shotgun_reload",
+			reload_sound_path: str = "assets/sounds/shotgun_reload.mp3"
 	):
 		super().__init__(game=game, path=path, scale=scale, animation_time=animation_time)
 		# Loads the images
@@ -58,6 +60,10 @@ class Weapon(AnimatedSprite):
 		self.speed_multiplier = speed_multiplier
 		# Function to be triggered after reload
 		self.post_reload_function = post_reload_function
+		# Creates the reload sound
+		self.reload_sound_name = reload_sound_name
+		if self.reload_sound_name is not None:
+			self.game.sound.load_sound(self.reload_sound_name, reload_sound_path)
 
 
 	def get_damage(self, distance: float) -> float:
@@ -78,6 +84,11 @@ class Weapon(AnimatedSprite):
 
 			# If the animation is playing, we perform the animation
 			if self.play_animation:
+				# Plays the reload sound if the animation just started
+				if self.reload_sound_name is not None and self.frame_counter == 0:
+					self.game.sound.loaded_sounds[self.reload_sound_name].play()
+
+				# Plays the animation
 				self.images.rotate(-1)
 				self.image = self.images[0]
 				self.weapon_pos = (
@@ -143,7 +154,8 @@ class Pistol(Weapon):
 			name="pistol",
 			starting_ammo=game.map.map_data["base_ammo"]["pistol"],
 			max_ammo=24,
-			speed_multiplier=1.02
+			speed_multiplier=1.02,
+			reload_sound_name=None
 		)
 
 	def get_damage(self, distance: float) -> float:
@@ -160,7 +172,8 @@ class Fist(Weapon):
 			name="fist",
 			starting_ammo=1,
 			max_ammo=1,
-			speed_multiplier=1.1
+			speed_multiplier=1.1,
+			reload_sound_name=None
 		)
 
 	def get_damage(self, distance: float) -> float:

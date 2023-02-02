@@ -82,10 +82,14 @@ class Map:
 		"""
 		for sprite in self.map_data["sprites"]:
 			if "appearance" not in sprite.keys():
+				sprite_data = sprite.get("data")
+				if sprite_data is None:
+					sprite_data = {}
 				self.game.objects_handler.add_sprite(
 					ALL_SPRITES[sprite["name"]](
 						self.game,
-						pos=sprite["pos"]
+						pos=sprite["pos"],
+						**sprite_data
 					)
 				)
 			else:

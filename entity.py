@@ -23,13 +23,15 @@ class Entity(AnimatedSprite):
 			animation_time: int = 180,
 			time_to_fire: Union[Tuple[int, int], int] = (5000, 6000),
 			no_ai: bool = False,
-			fleer: bool = False
+			fleer: bool = False,
+			play_appear_sound: bool = False
 	):
 		"""
 		:param time_to_fire: The time it takes for the entity to fire an aimed projectile at the player.
 		Can be either a tuple of two integers, and an int will be randomly chosen between them, a static integer value.
 		:param no_ai: Whether the entity should not possess an AI.
 		:param fleer: Whether the entity is a fleer ; if so, will run away from the player instead of coming to them.
+		:param play_appear_sound: Whether to play the sound of an entity appearing.
 		"""
 		super().__init__(game, path, pos, scale, shift, animation_time, hidden=True, darken=True)
 		# Loads all images for each state
@@ -62,8 +64,11 @@ class Entity(AnimatedSprite):
 		self._last_fireball_time = time.time()
 
 		# Loads the pain sound
-		self.game.sound.load_sound("pain", self.game.sound.sounds_path + 'npc_pain.wav', "entity")
-		self.game.sound.load_sound("death", self.game.sound.sounds_path + 'npc_death.wav', "entity")
+		self.game.sound.load_sound("enemy_pain", self.game.sound.sounds_path + 'npc_pain.wav', "entity")
+		self.game.sound.load_sound("enemy_death", self.game.sound.sounds_path + 'npc_death.wav', "entity")
+		self.game.sound.load_sound("enemy_spawn", self.game.sound.sounds_path + 'enemy_spawn_sound.wav', "entity")
+		if play_appear_sound:
+			self.game.sound.loaded_sounds["enemy_spawn"].play()
 
 	def update(self):
 		"""
@@ -231,7 +236,7 @@ class Entity(AnimatedSprite):
 					SETTINGS.graphics.resolution[0] // 2 + self.sprite_half_width:
 
 				# We play the pain sound
-				self.game.sound.loaded_sounds["pain"].play()
+				self.game.sound.loaded_sounds["enemy_pain"].play()
 				self.in_pain = True
 
 				# We decrease the entity's health by the weapon damage
@@ -249,7 +254,7 @@ class Entity(AnimatedSprite):
 		# Kills the entity if the health drops below zero
 		if self.health < 1:
 			self.alive = False
-			self.game.sound.loaded_sounds["death"].play()
+			self.game.sound.loaded_sounds["enemy_death"].play()
 			# Counts the dead
 			Entity.killed_entities += 1
 			# Creates the death time

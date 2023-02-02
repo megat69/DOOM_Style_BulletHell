@@ -31,6 +31,8 @@ class ShotgunPickup(Pickup):
 		super().__init__(
 			game, path = 'assets/textures/pickups/shotgun_sprite.png', pos = pos
 		)
+		# Creates the sound
+		self.game.sound.load_sound("shotgun_reload", "assets/sounds/shotgun_reload_long.mp3")
 
 
 	def pick_up(self):
@@ -68,6 +70,8 @@ class ShotgunPickup(Pickup):
 				)
 				wpn.animation_time = 70
 				wpn.game.player.can_move = True
+				wpn.game.sound.load_sound("shotgun_reload", "assets/sounds/shotgun_reload.mp3")
+				wpn.game.sound.loaded_sounds["enemy_spawn"].play()
 
 				# Removes the post reload function
 				wpn.post_reload_function = lambda x: None
@@ -89,7 +93,7 @@ class ShotgunPickup(Pickup):
 
 
 class Portal(PickupAnimated):
-	def __init__(self, game, pos):
+	def __init__(self, game, pos, play_sound:bool=True):
 		super().__init__(
 			game,
 			path = "assets/animated_sprites/portal/011.png",
@@ -97,12 +101,16 @@ class Portal(PickupAnimated):
 			scale = 1.0,
 			shift = 0.12
 		)
+		self.game.sound.load_sound("portal_opening", "assets/sounds/portal_opening.wav")
+		if play_sound:
+			self.game.sound.loaded_sounds["portal_opening"].play()
 
 	def pick_up(self):
 		print("Teleporting to next level")
 		self.game.save_data["current_level"] += 1
 		with open(os.path.join(SETTINGS.misc.save_location, "save_data.json"), "w") as save_data_file:
 			json.dump(self.game.save_data, save_data_file, indent=2)
+		self.game.sound.loaded_sounds["portal_opening"].play()
 		self.game.await_restart = True
 
 

@@ -38,6 +38,9 @@ class Fireball(AnimatedSprite):
 		if self.noclip:
 			self.image = pygame.image.load('assets/animated_sprites/fireball_blue/0.png').convert_alpha()
 
+		# Loads the player injured sound
+		self.game.sound.load_sound("player_injured", self.game.sound.sounds_path + "player_injured.wav", "entity")
+
 
 	def check_wall(self, x:int, y:int) -> bool:
 		"""
@@ -73,6 +76,7 @@ class Fireball(AnimatedSprite):
 			# Lowers the player health
 			self.game.player.health -= 1
 			self.game.player.check_health()
+			self.game.sound.loaded_sounds["player_injured"].play()
 			# Removes the projectile from the list of sprites
 			self.destroy()
 
