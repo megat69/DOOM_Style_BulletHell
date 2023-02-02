@@ -79,6 +79,7 @@ class Game:
 
 		# Loads the sprites on the map
 		self.map.load_sprites()
+		self.map.load_enemies()
 
 		# Loads the weapon
 		self.weapons = [

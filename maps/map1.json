@@ -7,7 +7,7 @@
 		[0, 0, 1, 0, 0, 0, 2, 0, 0],
 		[0, 0, 1, 2, 2, 2, 1, 0, 0]
 	],
-	"tile_size": 75,
+	"tile_size": 125,
 	"player_start_pos": [1.5, 1.5],
 	"base_enemy_spawn": 0,
 	"max_enemies": 0,

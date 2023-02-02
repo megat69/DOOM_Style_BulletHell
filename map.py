@@ -91,6 +91,14 @@ class Map:
 			else:
 				self.sprites_awaiting_appearance.append(sprite)
 
+
+	def load_enemies(self):
+		"""
+		Loads all the enemies.
+		"""
+		pass
+
+
 	def get_map(self):
 		"""
 		Writes the map to the world map.
