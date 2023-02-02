@@ -213,3 +213,97 @@ class AnimatedSprite(SpriteObject):
 			if isinstance(images, deque):
 				images.rotate(-1)
 				self.image = images[0]
+
+
+class VFX(SpriteObject):
+	def __init__(
+		self,
+		game,
+		path: str = 'assets/animated_sprites/vfx/enemy_spawning/1.png',
+		pos: tuple = (11.5, 3.5),
+		scale: float = 0.9,
+		shift: int = 0.27,
+		animation_time: int = 70,
+		hidden: bool = True,
+		darken: bool = False
+	):
+		"""
+		:param hidden: Whether to show the sprite in 2D.
+		:param darken: Whether to use the depth darkening process on this sprite in 3D.
+		"""
+		# Calls the superclass
+		super().__init__(game, path, pos, scale, shift, hidden, darken)
+		# Saves the animation time
+		self.animation_time = animation_time
+		# Saves the path as a list
+		self.path = path.rsplit('/', 1)[0]
+		# Loads all images in the path
+		self.animations = self.get_images(self.path)
+
+		# Remembers the value of the previous animation time and whether to trigger the animation
+		self.previous_animation_time = pygame.time.get_ticks()
+		self.play_animation = False
+		self.current_frame = 0
+
+
+	def get_images(self, path: str) -> list:
+		"""
+		Fetches all images in the given folder and returns them.
+		"""
+		# Initializes a queue
+		images = []
+
+		# Fetches all images in the given directory
+		for filename in os.listdir(path):
+			if os.path.isfile(os.path.join(path, filename)):
+				# Loads the file into the queue
+				images.append(pygame.image.load(os.path.join(path, filename)).convert_alpha())
+
+		# Returns the queue of images
+		return images
+
+	def check_animation_time(self):
+		"""
+		Animates to next frame if the given time has elapsed.
+		"""
+		self.play_animation = False
+
+		# Gets the current time
+		time_now = pygame.time.get_ticks()
+
+		# If it is time to play the next animation frame
+		if time_now - self.previous_animation_time > self.animation_time:
+			# We play the next frame
+			self.previous_animation_time = time_now
+			self.play_animation = True
+
+
+	def animate(self, images):
+		"""
+		Animates the sprite.
+		:param images: The animation frames.
+		"""
+		if isinstance(images, str):
+			images = self.animations[images]
+
+		# If the next frame should be displayed
+		if self.play_animation:
+			# We rotate the queue and select the next frame as the current frame
+			if isinstance(images, deque):
+				images.rotate(-1)
+				self.image = images[0]
+			elif isinstance(images, list):
+				if len(images) > self.current_frame:
+					self.image = images[self.current_frame]
+					self.current_frame += 1
+				else:
+					self.game.objects_handler.sprites_list.remove(self)
+
+
+	def update(self):
+		"""
+		Gets called every frame, runs the sprite logic followed by the animation.
+		"""
+		super().update()
+		self.check_animation_time()
+		self.animate(self.animations)

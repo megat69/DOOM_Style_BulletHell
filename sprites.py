@@ -88,6 +88,9 @@ class ShotgunPickup(Pickup):
 					self.game.objects_handler.create_enemy(
 						pos=(i, j)
 					)
+			self.game.objects_handler.create_enemy(
+				pos=(len(self.game.map.map) - 1.5, 4.5)
+			)
 			self.game.weapon.reloading = True
 			self.game.weapon.animate_shot()
 

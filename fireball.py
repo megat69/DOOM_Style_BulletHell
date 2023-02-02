@@ -1,4 +1,4 @@
-from sprite_object import AnimatedSprite
+from sprite_object import AnimatedSprite, VFX
 from utils import distance
 from settings import SETTINGS
 
@@ -198,6 +198,16 @@ class Fireball(AnimatedSprite):
 			if SETTINGS.graphics.resolution[0] // 2 - self.sprite_half_width \
 					< self.screen_x < \
 					SETTINGS.graphics.resolution[0] // 2 + self.sprite_half_width:
+				# Adds a VFX object
+				self.game.objects_handler.add_sprite(
+					VFX(
+						self.game,
+						path="assets/animated_sprites/vfx/fireball_exploding/1.png",
+						pos=(self.x, self.y),
+						animation_time=15
+					)
+				)
+
 				# We decrease the entity's health by the weapon damage
 				for entity in self.game.objects_handler.entities:
 					entity_distance = distance(self.x, entity.x, self.y, entity.y)

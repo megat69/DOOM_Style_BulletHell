@@ -5,7 +5,7 @@ import time
 from typing import Tuple, Union
 
 from settings import SETTINGS
-from sprite_object import AnimatedSprite
+from sprite_object import AnimatedSprite, VFX
 from pickups import Ammo, Health
 from utils import distance
 from fireball import Fireball
@@ -69,6 +69,13 @@ class Entity(AnimatedSprite):
 		self.game.sound.load_sound("enemy_spawn", self.game.sound.sounds_path + 'enemy_spawn_sound.wav', "entity")
 		if play_appear_sound:
 			self.game.sound.loaded_sounds["enemy_spawn"].play()
+
+		# Adds a VFX object
+		self.game.objects_handler.add_sprite(
+			VFX(
+				self.game, pos=pos
+			)
+		)
 
 	def update(self):
 		"""
