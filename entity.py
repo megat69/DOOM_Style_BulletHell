@@ -45,13 +45,13 @@ class Entity(AnimatedSprite):
 		self.attack_distance = 20
 		self.speed = 0.025
 		self.size = 10
-		self.health = 100
+		self.health = int(100 * (1 + fleer / 4))
 		self.alive = True
 		self.in_pain = False
 		self.can_see_player = False
 		self.frame_counter = 0
 		self.culling_distance = 0.2
-		self.player_close_by = 0
+		self.player_far_enough = 0
 		self.time_to_fire = randint(
 			time_to_fire[0], time_to_fire[1]
 		) if isinstance(time_to_fire, tuple) else time_to_fire
@@ -136,7 +136,7 @@ class Entity(AnimatedSprite):
 			self.check_hit_by_player()
 
 			# Random chance we spawn a fireball
-			if self.player_close_by <= self.time_to_fire and randint(
+			if self.player_far_enough <= self.time_to_fire and randint(
 					0, len(self.game.objects_handler.entities) * 9) == 0:
 				self.game.objects_handler.sprites_list.append(
 					Fireball(
@@ -164,10 +164,10 @@ class Entity(AnimatedSprite):
 
 				# Notices how long the player has been in sight
 				if distance(self.x, self.game.player.x, self.y, self.game.player.y) < self.shooting_accurate_distance:
-					self.player_close_by += self.game.delta_time
+					self.player_far_enough += self.game.delta_time
 
 				# If the player has been close to the entity too long, sending a fireball in his direction
-				if self.player_close_by > self.time_to_fire:
+				if self.player_far_enough > self.time_to_fire:
 					self.game.objects_handler.sprites_list.append(
 						Fireball(
 							self.game,
@@ -181,7 +181,7 @@ class Entity(AnimatedSprite):
 							)
 						)
 					)
-					self.player_close_by = 0
+					self.player_far_enough = 0
 
 			# Otherwise, just idles there
 			else:
