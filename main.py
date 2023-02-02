@@ -2,6 +2,9 @@ import pygame
 import sys
 import math
 from random import randint, uniform, choice
+import time
+import os
+import json
 
 from settings import SETTINGS
 from map import Map
@@ -9,7 +12,7 @@ from player import Player
 from raycasting import RayCasting
 from object_renderer import ObjectRenderer
 from object_handler import ObjectHandler
-from weapon import Shotgun, Pistol, Fist
+from weapon import Shotgun, Pistol, Fist, ALL_WEAPONS
 from sounds import SoundHandler
 from UI import UI
 from entity import Entity
@@ -43,6 +46,19 @@ class Game:
 		"""
 		Creates a new game.
 		"""
+		self.await_restart = False
+
+		# Loads the save data
+		with open(os.path.join(SETTINGS.misc.save_location, "save_data.json")) as save_data_file:
+			self.save_data = json.load(save_data_file)
+
+		# Remembers the start time
+		self.start_time = time.time()
+
+		# Starts in 2D
+		self.is_3D: bool = False
+		pygame.mouse.set_visible(True)
+
 		# Loads all the sounds
 		self.sound = SoundHandler(self)
 
@@ -61,13 +77,17 @@ class Game:
 		# Loads the objects handler
 		self.objects_handler = ObjectHandler(self)
 
+		# Loads the sprites on the map
+		self.map.load_sprites()
+		self.map.load_enemies()
+
 		# Loads the weapon
-		self.weapons = [Shotgun(self), Pistol(self), Fist(self)]
+		self.weapons = [
+			ALL_WEAPONS[weapon](self)
+			for weapon in self.map.map_data["available_weapons"]
+		]
 		self.current_weapon = 0
 		self.weapon = self.weapons[self.current_weapon]
-
-		# Starts in 2D
-		self.is_3D: bool = False
 
 		# Loads the UI
 		self.UI = UI(self)
@@ -104,13 +124,21 @@ class Game:
 			(105, SETTINGS.graphics.resolution[1] - 50),
 			(255, 128, 0)
 		)
+		self.map.load_title_ui()
 
 
 	def update(self):
 		"""
 		Runs every frame, contains the game's main logic.
 		"""
+		# If we need to restart
+		if self.await_restart:
+			self.new_game()
+
 		if self.player.health > 0:
+			# Updates the map
+			self.map.update()
+
 			# Updates the player position
 			self.player.update()
 
@@ -128,14 +156,15 @@ class Game:
 			self.UI.update()
 
 			# Infinitely spawns enemies and fireballs cuz why not
-			if randint(0, 100) == 0 and len(self.objects_handler.entities) < 15:
-				self.objects_handler.create_enemy()
+			if randint(0, 100) == 0 and len(self.objects_handler.entities) < self.map.max_enemies:
+				self.objects_handler.create_enemy(fleer=randint(1, 4) == 1)
 
 			"""self.screen.blit(self.raycasting._masking_surface, (0, 0), None, pygame.BLEND_RGBA_MULT)
 			self.raycasting._masking_surface.fill('black')"""
 
 		else:
 			self.player.rel = 0
+			pygame.event.set_grab(False)
 
 		# Erases the pygame display
 		pygame.display.flip()
@@ -191,10 +220,25 @@ class Game:
 
 			# Methods to draw the depth texture and AO
 			# self.screen.blit(self.object_renderer.depth_texture.convert(), (0, 0))
-			self.screen.blit(self.object_renderer.ambient_occlusion_texture.convert(), (0, 0))
+			# self.screen.blit(self.object_renderer.ambient_occlusion_texture.convert(), (0, 0))
 
 		# Draws the UI
 		self.UI.draw()
+
+		# Displays the title screen
+		time_since_load = time.time() - self.start_time
+		if time_since_load < Map.TITLE_SCREEN_DURATION + Map.TITLE_SCREEN_BLEND_TIME:
+			blocker = pygame.Surface(SETTINGS.graphics.resolution).convert_alpha()
+			if time_since_load < Map.TITLE_SCREEN_DURATION:
+				blocker.fill((0, 0, 0))
+			else:
+				time_since_load -= Map.TITLE_SCREEN_DURATION
+				clamp = lambda x: max(0, min(x, 1))  # Makes sure the number is between 0 and 1
+				blocker.fill((0, 0, 0, 255 * clamp(1 - time_since_load / Map.TITLE_SCREEN_DURATION)))
+			self.screen.blit(blocker, (0, 0))
+
+		# Draws the UI
+		self.UI.draw(True)
 
 
 	def check_events(self):

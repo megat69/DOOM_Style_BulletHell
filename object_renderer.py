@@ -94,7 +94,6 @@ class ObjectRenderer:
 
 
 
-
 	@staticmethod
 	def get_texture(path:str, resolution:tuple=(SETTINGS.graphics.texture_size, SETTINGS.graphics.texture_size)):
 		"""

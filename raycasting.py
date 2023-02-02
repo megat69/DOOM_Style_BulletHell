@@ -203,12 +203,12 @@ class RayCasting:
 			# 		self._masking_surface,
 			# 		'white',
 			# 		(
-			# 			SETTINGS.graphics.tile_size * original_position_x,
-			# 			SETTINGS.graphics.tile_size * original_position_y
+			# 			self.game.map.tile_size * original_position_x,
+			# 			self.game.map.tile_size * original_position_y
 			# 		),
 			# 		(
-			# 			SETTINGS.graphics.tile_size * original_position_x + SETTINGS.graphics.tile_size * depth * cos_a,
-			# 			SETTINGS.graphics.tile_size * original_position_y + SETTINGS.graphics.tile_size * depth * sin_a
+			# 			self.game.map.tile_size * original_position_x + self.game.map.tile_size * depth * cos_a,
+			# 			self.game.map.tile_size * original_position_y + self.game.map.tile_size * depth * sin_a
 			# 		),
 			# 		2
 			# 	)

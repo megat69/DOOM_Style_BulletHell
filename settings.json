@@ -9,7 +9,6 @@
 		"delta_angle": null,
 		"max_depth": 20,
 		"texture_size": 256,
-		"tile_size": 100,
 		"floor_color": [40, 20, 0],
 		"sprite_size_2D": 64,
 		"advanced_depth_darkening": true,
@@ -18,7 +17,6 @@
 		"show_FPS": true
 	},
 	"player": {
-		"pos": [1.5, 5],
 		"angle": 0,
 		"speed": 0.003,
 		"rotation_speed": 0.0018,
@@ -44,5 +42,8 @@
 		"weapon": 1.0,
 		"entity": 1.0,
 		"sfx": 1.0
+	},
+	"misc": {
+		"save_location": "save"
 	}
 }

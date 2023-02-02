@@ -1,0 +1,30 @@
+{
+	"map_title": "Hell awaits...",
+	"map": [
+		[2, 2, 2, 1, 2, 2, 2, 1, 2],
+		[2, 0, 0, 0, 2, 0, 0, 0, 2],
+		[2, 2, 1, 0, 1, 0, 1, 2, 2],
+		[0, 0, 1, 0, 0, 0, 2, 0, 0],
+		[0, 0, 1, 2, 2, 2, 1, 0, 0]
+	],
+	"tile_size": 125,
+	"player_start_pos": [1.5, 1.5],
+	"base_enemy_spawn": 0,
+	"max_enemies": 0,
+	"base_ammo": {
+		"shotgun": 18,
+		"pistol": 24
+	},
+	"enemies": {
+		"min_fire_delay": 1
+	},
+	"starting_perspective_is_2D": true,
+	"available_weapons": ["shotgun", "fist"],
+	"fixed_enemy_spawns": [],
+	"sprites": [
+		{
+			"name": "portal",
+			"pos": [7.5, 1.5]
+		}
+	]
+}

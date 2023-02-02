@@ -21,11 +21,15 @@ class Entity(AnimatedSprite):
 			scale: float = 0.6,
 			shift: int = 0.38,
 			animation_time: int = 180,
-			time_to_fire: Union[Tuple[int, int], int] = (2400, 3000)
+			time_to_fire: Union[Tuple[int, int], int] = (5000, 6000),
+			no_ai: bool = False,
+			fleer: bool = False
 	):
 		"""
 		:param time_to_fire: The time it takes for the entity to fire an aimed projectile at the player.
 		Can be either a tuple of two integers, and an int will be randomly chosen between them, a static integer value.
+		:param no_ai: Whether the entity should not possess an AI.
+		:param fleer: Whether the entity is a fleer ; if so, will run away from the player instead of coming to them.
 		"""
 		super().__init__(game, path, pos, scale, shift, animation_time, hidden=True, darken=True)
 		# Loads all images for each state
@@ -41,18 +45,21 @@ class Entity(AnimatedSprite):
 		self.attack_distance = 20
 		self.speed = 0.025
 		self.size = 10
-		self.health = 100
+		self.health = int(100 * (1 + fleer / 4))
 		self.alive = True
 		self.in_pain = False
 		self.can_see_player = False
 		self.frame_counter = 0
 		self.culling_distance = 0.2
-		self.player_close_by = 0
+		self.player_far_enough = 0
 		self.time_to_fire = randint(
 			time_to_fire[0], time_to_fire[1]
 		) if isinstance(time_to_fire, tuple) else time_to_fire
 		self.inaccuracy = 0.005
 		self.shooting_accurate_distance = 3
+		self.no_ai = no_ai
+		self.fleer = fleer
+		self._last_fireball_time = time.time()
 
 		# Loads the pain sound
 		self.game.sound.load_sound("pain", self.game.sound.sounds_path + 'npc_pain.wav', "entity")
@@ -68,6 +75,16 @@ class Entity(AnimatedSprite):
 		# if distance(self.x, self.player.x, self.y, self.player.y) < self.shooting_accurate_distance \
 		# 		and self.game.is_3D is False:
 		# 	self.draw_ray_cast(True)
+		if self.game.is_3D is False and self.alive:
+			pygame.draw.circle(
+				self.game.screen,
+				(255, 0, 0),
+				(
+					self.x * self.game.map.tile_size,
+					self.y * self.game.map.tile_size
+				),
+				10
+			)
 
 	def check_wall(self, x:int, y:int) -> bool:
 		"""
@@ -100,6 +117,10 @@ class Entity(AnimatedSprite):
 			else:
 				direction = pygame.Vector2(math.cos(angle) * self.speed, math.sin(angle) * self.speed)
 
+
+		# Inverting the direction if the mob is a fleer
+		direction *= (-1) ** self.fleer
+
 		# If there is no wall collision and no other entity there already, moves in this direction
 		self.check_wall_collisions(direction)
 
@@ -116,8 +137,10 @@ class Entity(AnimatedSprite):
 			self.check_hit_by_player()
 
 			# Random chance we spawn a fireball
-			if self.player_close_by <= self.time_to_fire and randint(
-					0, len(self.game.objects_handler.entities) * 8) == 0:
+			if self.player_far_enough <= self.time_to_fire and randint(
+					0, len(self.game.objects_handler.entities) * 6) == 0 and (
+				time.time() - self._last_fireball_time >= self.game.map.map_data["enemies"]["min_fire_delay"]
+			):
 				self.game.objects_handler.sprites_list.append(
 					Fireball(
 						self.game,
@@ -132,22 +155,23 @@ class Entity(AnimatedSprite):
 						noclip=randint(0, 100) < 5
 					)
 				)
+				self._last_fireball_time = time.time()
 
 			# If the entity was hit by a shot, plays the pain animation
 			if self.in_pain:
 				self.animate_pain()
 
 			# If it can see the player, plays the walking animation and chases the player
-			elif self.can_see_player:
+			elif self.can_see_player and not self.no_ai:
 				self.animate(self.animations['walk'])
 				self.movement()
 
 				# Notices how long the player has been in sight
 				if distance(self.x, self.game.player.x, self.y, self.game.player.y) > self.shooting_accurate_distance:
-					self.player_close_by += self.game.delta_time
+					self.player_far_enough += self.game.delta_time
 
 				# If the player has been close to the entity too long, sending a fireball in his direction
-				if self.player_close_by > self.time_to_fire:
+				if self.player_far_enough > self.time_to_fire:
 					self.game.objects_handler.sprites_list.append(
 						Fireball(
 							self.game,
@@ -161,7 +185,7 @@ class Entity(AnimatedSprite):
 							)
 						)
 					)
-					self.player_close_by = 0
+					self.player_far_enough = 0
 
 			# Otherwise, just idles there
 			else:
@@ -242,26 +266,27 @@ class Entity(AnimatedSprite):
 					)
 				)
 			else:
-				if randint(0, 3) == 0:
+				if randint(0, 1) == 0:
 					self.game.objects_handler.add_sprite(
 						Health(
 							self.game,
 							pos=(self.x, self.y)
 						)
 					)
-				else:
-					chosen_weapon = choice(self.game.weapons)
-					while chosen_weapon is self.game.get_weapon_by_name("fist"):
+				if randint(0, 2) != 2:
+					if not all(weapon.name == "fist" for weapon in self.game.weapons):
 						chosen_weapon = choice(self.game.weapons)
-					self.game.objects_handler.add_sprite(
-						Ammo(
-							self.game, f'assets/textures/pickups/{chosen_weapon.name}.png',
-							(self.x, self.y), chosen_weapon.name, randint(
-								Ammo.BASE_GAIN[chosen_weapon.name][0],
-								Ammo.BASE_GAIN[chosen_weapon.name][1]
+						while chosen_weapon is self.game.get_weapon_by_name("fist"):
+							chosen_weapon = choice(self.game.weapons)
+						self.game.objects_handler.add_sprite(
+							Ammo(
+								self.game, f'assets/textures/pickups/{chosen_weapon.name}.png',
+								(self.x, self.y), chosen_weapon.name, randint(
+									Ammo.BASE_GAIN[chosen_weapon.name][0],
+									Ammo.BASE_GAIN[chosen_weapon.name][1]
+								)
 							)
 						)
-					)
 
 	@property
 	def map_pos(self):
@@ -366,18 +391,18 @@ class Entity(AnimatedSprite):
 		if not normalized_ray_only:
 			pygame.draw.circle(
 				self.game.screen, 'red', (
-					SETTINGS.graphics.tile_size * self.x,
-					SETTINGS.graphics.tile_size * self.y
+					self.game.map.tile_size * self.x,
+					self.game.map.tile_size * self.y
 				), 15
 			)
 
 		if self.ray_cast_player_to_entity():
 			pygame.draw.line(
 				self.game.screen, 'red', (
-					SETTINGS.graphics.tile_size * self.player.x,
-					SETTINGS.graphics.tile_size * self.player.y
+					self.game.map.tile_size * self.player.x,
+					self.game.map.tile_size * self.player.y
 				), (
-					SETTINGS.graphics.tile_size * self.x,
-					SETTINGS.graphics.tile_size * self.y
+					self.game.map.tile_size * self.x,
+					self.game.map.tile_size * self.y
 				), 2
 			)
