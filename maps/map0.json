@@ -21,24 +21,41 @@
 	"enemies": {
 		"min_fire_delay": 2
 	},
+	"starting_perspective_is_2D": false,
 	"available_weapons": ["fist"],
 	"fixed_enemy_spawns": [],
 	"sprites": [
 		{
 			"name": "candlebra",
-			"pos": [3.5, 4.5]
+			"pos": [1.5, 1.5]
 		},
 		{
 			"name": "candlebra",
-			"pos": [5.5, 4.5]
+			"pos": [1.5, 7.5]
+		},
+		{
+			"name": "candlebra",
+			"pos": [7.5, 1.5]
+		},
+		{
+			"name": "candlebra",
+			"pos": [7.5, 7.5]
 		},
 		{
 			"name": "green_flame",
-			"pos": [4.5, 3.5]
+			"pos": [4.1, 4.1]
 		},
 		{
 			"name": "green_flame",
-			"pos": [4.5, 5.5]
+			"pos": [4.9, 4.1]
+		},
+		{
+			"name": "green_flame",
+			"pos": [4.9, 4.9]
+		},
+		{
+			"name": "green_flame",
+			"pos": [4.1, 4.9]
 		},
 		{
 			"name": "shotgun_pickup",

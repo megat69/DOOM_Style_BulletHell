@@ -1,5 +1,5 @@
 import pygame
-from random import randint
+import time
 import json
 from importlib import import_module
 
@@ -21,6 +21,8 @@ class Map:
 	"""
 	The class containing the game's map system.
 	"""
+	TITLE_SCREEN_DURATION   = 2
+	TITLE_SCREEN_BLEND_TIME = 3
 	def __init__(self, game):
 		"""
 		Initializes the class using the Game class.
@@ -45,6 +47,25 @@ class Map:
 		self.max_enemies = map_data["max_enemies"]  # Max amount of enemies on the map
 		self.map_data = map_data
 		self.sprites_awaiting_appearance = []
+
+		# Uses the perspective the map wants us to start with
+		self.game.is_3D = not self.map_data["starting_perspective_is_2D"]
+		pygame.event.set_grab(self.game.is_3D)
+		pygame.mouse.set_visible(not self.game.is_3D)
+
+
+	def load_title_ui(self):
+		"""
+		Creates the title of the level
+		"""
+		def title_update(game, element):
+			if element["position"][0] + 400 > 0:
+				element["position"][0] -= game.delta_time / 15
+
+		self.game.UI.create_UI_element(
+			"level_title", self.map_data["map_title"], "Impact", 40, title_update,
+			[100, SETTINGS.graphics.resolution[1] - 120], (255, 255, 255), force=True
+		)
 
 	def load_sprites(self):
 		"""

@@ -14,7 +14,7 @@ class UI:
 
 	def create_UI_element(self, name: str, text: str, font_name: str, font_size: int, update: Callable,
 	                      position: Tuple[int, int], color: Tuple[int, int, int] = (0, 0, 0),
-	                      centered: bool = False):
+	                      centered: bool = False, force: bool = False):
 		"""
 		Creates a new UI element.
 		"""
@@ -24,7 +24,8 @@ class UI:
 			"update": update,
 			"position": position,
 			"color": color,
-			"centered": centered
+			"centered": centered,
+			"force": force
 		}
 
 	def update(self):
@@ -35,14 +36,19 @@ class UI:
 			element["update"](self.game, element)
 
 
-	def draw(self):
+	def draw(self, force: bool = False):
+		"""
+		Draws all the elements of the UI.
+		:param force: Draws those elements no matter what.
+		"""
 		for element in self.UI_elements.values():
-			text_surface = element["font"].render(element["text"], False, element["color"])
-			self.game.screen.blit(text_surface, (
-				element["position"][0] - (
-					text_surface.get_width() // 2 * element["centered"]
-				),
-				element["position"][1] - (
-					text_surface.get_height() // 2 * element["centered"]
-				)
-			))
+			if element["force"] == force:
+				text_surface = element["font"].render(element["text"], False, element["color"])
+				self.game.screen.blit(text_surface, (
+					element["position"][0] - (
+						text_surface.get_width() // 2 * element["centered"]
+					),
+					element["position"][1] - (
+						text_surface.get_height() // 2 * element["centered"]
+					)
+				))

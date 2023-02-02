@@ -3,6 +3,7 @@ from pygame.math import Vector2
 import math
 import os
 from collections import deque
+import time
 
 from settings import SETTINGS
 
@@ -101,16 +102,17 @@ class SpriteObject:
 		"""
 		Renders a sprite in 2D mode.
 		"""
-		self.game.screen.blit(
-			pygame.transform.scale(self.image, (
-				SETTINGS.graphics.sprite_size_2D * self.IMAGE_RATIO * self.SPRITE_SCALE,
-				SETTINGS.graphics.sprite_size_2D * self.SPRITE_SCALE
-			)),
-			(
-				int(self.x * self.game.map.tile_size) - SETTINGS.graphics.sprite_size_2D * self.SPRITE_SCALE // 2,
-				int(self.y * self.game.map.tile_size) - SETTINGS.graphics.sprite_size_2D * self.SPRITE_SCALE // 2
+		if time.time() - self.game.start_time > self.game.map.TITLE_SCREEN_DURATION + self.game.map.TITLE_SCREEN_BLEND_TIME:
+			self.game.screen.blit(
+				pygame.transform.scale(self.image, (
+					SETTINGS.graphics.sprite_size_2D * self.IMAGE_RATIO * self.SPRITE_SCALE,
+					SETTINGS.graphics.sprite_size_2D * self.SPRITE_SCALE
+				)),
+				(
+					int(self.x * self.game.map.tile_size) - SETTINGS.graphics.sprite_size_2D * self.SPRITE_SCALE // 2,
+					int(self.y * self.game.map.tile_size) - SETTINGS.graphics.sprite_size_2D * self.SPRITE_SCALE // 2
+				)
 			)
-		)
 
 	def update(self):
 		"""

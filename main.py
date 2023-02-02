@@ -2,6 +2,7 @@ import pygame
 import sys
 import math
 from random import randint, uniform, choice
+import time
 
 from settings import SETTINGS
 from map import Map
@@ -43,6 +44,13 @@ class Game:
 		"""
 		Creates a new game.
 		"""
+		# Remembers the start time
+		self.start_time = time.time()
+
+		# Starts in 2D
+		self.is_3D: bool = False
+		pygame.mouse.set_visible(True)
+
 		# Loads all the sounds
 		self.sound = SoundHandler(self)
 
@@ -71,9 +79,6 @@ class Game:
 		]
 		self.current_weapon = 0
 		self.weapon = self.weapons[self.current_weapon]
-
-		# Starts in 2D
-		self.is_3D: bool = False
 
 		# Loads the UI
 		self.UI = UI(self)
@@ -110,6 +115,7 @@ class Game:
 			(105, SETTINGS.graphics.resolution[1] - 50),
 			(255, 128, 0)
 		)
+		self.map.load_title_ui()
 
 
 	def update(self):
@@ -205,6 +211,21 @@ class Game:
 
 		# Draws the UI
 		self.UI.draw()
+
+		# Displays the title screen
+		time_since_load = time.time() - self.start_time
+		if time_since_load < Map.TITLE_SCREEN_DURATION + Map.TITLE_SCREEN_BLEND_TIME:
+			blocker = pygame.Surface(SETTINGS.graphics.resolution).convert_alpha()
+			if time_since_load < Map.TITLE_SCREEN_DURATION:
+				blocker.fill((0, 0, 0))
+			else:
+				time_since_load -= Map.TITLE_SCREEN_DURATION
+				clamp = lambda x: max(0, min(x, 1))  # Makes sure the number is between 0 and 1
+				blocker.fill((0, 0, 0, 255 * clamp(1 - time_since_load / Map.TITLE_SCREEN_DURATION)))
+			self.screen.blit(blocker, (0, 0))
+
+		# Draws the UI
+		self.UI.draw(True)
 
 
 	def check_events(self):
