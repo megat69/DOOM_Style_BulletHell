@@ -24,7 +24,8 @@ class Entity(AnimatedSprite):
 			time_to_fire: Union[Tuple[int, int], int] = (5000, 6000),
 			no_ai: bool = False,
 			fleer: bool = False,
-			play_appear_sound: bool = False
+			play_appear_sound: bool = False,
+			speed: float = 0.015
 	):
 		"""
 		:param time_to_fire: The time it takes for the entity to fire an aimed projectile at the player.
@@ -45,7 +46,7 @@ class Entity(AnimatedSprite):
 
 		# Entity parameters
 		self.attack_distance = 20
-		self.speed = 0.025
+		self.speed = speed
 		self.size = 10
 		self.health = int(100 * (1 + fleer / 4))
 		self.alive = True
@@ -154,7 +155,7 @@ class Entity(AnimatedSprite):
 			if self.player_far_enough <= self.time_to_fire and randint(
 					0, len(self.game.objects_handler.entities) * 6) == 0 and (
 				time.time() - self._last_fireball_time >= self.game.map.map_data["enemies"]["min_fire_delay"]
-			):
+			) and self.game.start_time > self.game.map.TITLE_SCREEN_DURATION:
 				self.game.objects_handler.sprites_list.append(
 					Fireball(
 						self.game,
@@ -184,8 +185,8 @@ class Entity(AnimatedSprite):
 				if distance(self.x, self.game.player.x, self.y, self.game.player.y) > self.shooting_accurate_distance:
 					self.player_far_enough += self.game.delta_time
 
-				# If the player has been close to the entity too long, sending a fireball in his direction
-				if self.player_far_enough > self.time_to_fire:
+				# If the player has been far away from the entity too long, sending a fireball in his direction
+				if self.player_far_enough > self.time_to_fire and self.game.start_time > self.game.map.TITLE_SCREEN_DURATION:
 					self.game.objects_handler.sprites_list.append(
 						Fireball(
 							self.game,
