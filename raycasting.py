@@ -117,10 +117,13 @@ class RayCasting:
 
 		# Calculates the angle of the raycast, based on the player's rotation angle, half FOV, and a small value to
 		# avoid divisions by zero
-		ray_angle = self.game.player.angle - SETTINGS.graphics.fov / 2 + 0.0001
+		base_ray_angle = self.game.player.angle - SETTINGS.graphics.fov / 2 + 0.0001
 
 		# Raycasts n times where n is the amount of rays we want to cast
 		for ray in range(SETTINGS.graphics.num_rays):
+			# Calculates the angle of the ray
+			ray_angle = base_ray_angle + (ray * SETTINGS.graphics.delta_angle)
+
 			# Precalculates the sine and cosine of the ray's angle
 			sin_a, cos_a = math.sin(ray_angle), math.cos(ray_angle)
 
@@ -212,9 +215,6 @@ class RayCasting:
 			# 		),
 			# 		2
 			# 	)
-
-			# Calculates the angle of the ray
-			ray_angle += SETTINGS.graphics.delta_angle
 
 
 	def update(self):
