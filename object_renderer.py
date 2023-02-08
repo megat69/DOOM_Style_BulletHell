@@ -68,7 +68,7 @@ class ObjectRenderer:
 		objects_list = sorted(self.game.raycasting.objects_to_render, key=lambda t: t[0], reverse=True)
 
 		# Clears the depth texture
-		self.depth_texture.fill((0, 0, 0))
+		# self.depth_texture.fill((0, 0, 0))
 
 		# Normalize function
 		normalize_depth = lambda x: (1 - (x / SETTINGS.graphics.max_depth)) * 255
@@ -80,7 +80,7 @@ class ObjectRenderer:
 			self.screen.blit(image, pos)
 
 			# Drawing to the depth texture
-			normalized_depth = normalize_depth(depth)
+			"""normalized_depth = normalize_depth(depth)
 			try:
 				pygame.draw.rect(
 					self.depth_texture,
@@ -90,7 +90,7 @@ class ObjectRenderer:
 						image.get_width(), image.get_height()
 					)
 				)
-			except ValueError: pass
+			except ValueError: pass"""
 
 
 
