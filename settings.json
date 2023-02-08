@@ -1,6 +1,7 @@
 {
 	"graphics": {
 		"resolution": [1280, 720],
+		"fullscreen": false,
 		"framerate": 0,
 		"fov": null,
 		"half_fov": null,

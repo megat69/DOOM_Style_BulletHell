@@ -1,4 +1,5 @@
 import pygame
+from pygame.locals import DOUBLEBUF, FULLSCREEN, QUIT, MOUSEBUTTONDOWN, KEYDOWN
 import sys
 import math
 from random import randint, uniform, choice
@@ -31,8 +32,14 @@ class Game:
 		pygame.init()
 
 		# Creates the main application's window
-		self.screen = pygame.display.set_mode(SETTINGS.graphics.resolution)
+		flags = DOUBLEBUF  # Sets the flag for the window
+		if SETTINGS.graphics.fullscreen:
+			flags = flags | FULLSCREEN
+		self.screen = pygame.display.set_mode(SETTINGS.graphics.resolution, flags)
 		self.rendering_surface = pygame.Surface(SETTINGS.graphics.resolution)
+
+		# Only authorizes some events for optimization
+		pygame.event.set_allowed([QUIT, KEYDOWN, MOUSEBUTTONDOWN])
 
 		# The game's clock system (keeps a constant framerate and delta time)
 		self.delta_time = 1
